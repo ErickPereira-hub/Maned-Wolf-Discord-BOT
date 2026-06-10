@@ -1,12 +1,12 @@
 import discord
 from discord.ext import commands
-from domain.interfaces.bot_interfaces.bot import Bot
+from project.domain.interfaces.bot_interfaces.bot import Bot
 import os
 
-class NamedWolfDiscordBot(Bot):
+class ManedWolfDiscordBot(Bot):
 
     def __init__(self,
-                name: str = "Named Wolf Data",
+                name: str = "Maned Wolf Data",
                 description: str = "Maned Wolf Data is a bot that performs advanced data analysis on your server\'s datasets, delivering real-time insights through simple commands. Beyond that, it provides future predictions powered by statistical models and machine learning, helping you anticipate trends and make informed decisions.",
                 prefix: str = "?wolf"):
         self._name: str = name

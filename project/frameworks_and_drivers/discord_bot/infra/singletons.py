@@ -1,3 +1,3 @@
-from .named_wolf_bot import NamedWolfDiscordBot
+from .maned_wolf_bot import ManedWolfDiscordBot
 
-NW_BOT: NamedWolfDiscordBot = NamedWolfDiscordBot()
+MW_BOT: ManedWolfDiscordBot = ManedWolfDiscordBot()
