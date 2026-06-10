@@ -1,2 +1,3 @@
 /venv
-credentials.env
+bot_credentials.env
+mysql_credentials.env
