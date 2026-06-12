@@ -33,6 +33,7 @@ class AutomateMySQLDatabaseCreation:
                     """
                         CREATE TABLE IF NOT EXISTS servers (
                             server_id INT PRIMARY KEY,
+                            server_name VARCHAR(200),
                             member_qtt INT,
                             server_owner_name VARCHAR(200),
                             creation_date DATETIME,

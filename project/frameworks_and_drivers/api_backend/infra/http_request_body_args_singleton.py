@@ -1,0 +1,3 @@
+from project.frameworks_and_drivers.api_backend.infra.http_request_body_args import HttpRequestBodyArgs
+
+HTTP_BODY_ARGS: HttpRequestBodyArgs = HttpRequestBodyArgs()
