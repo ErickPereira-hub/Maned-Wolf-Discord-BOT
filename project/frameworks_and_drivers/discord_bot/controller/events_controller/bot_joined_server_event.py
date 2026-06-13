@@ -47,7 +47,6 @@ async def on_guild_join(guild: discord.Guild) -> None:
         "ccategories": [str(c["category"]) for c in channels],
         "are_nsfw": [str(c["is_nsfw"]) for c in channels]
     }
-    print(server_data)
     #Sending a request to the API of the BOT
     URL: str = os.getenv("BASE_URL") + "/new-server"
     resp = requests.post(URL, json = server_data)
@@ -56,10 +55,7 @@ async def on_guild_join(guild: discord.Guild) -> None:
             await txt_channels[0].send("❌ ERROR: something went bad during the acquisition of data!")
         if server_owner:
             await server_owner.send("❌ ERROR: something went bad during the acquisition of data!")
-        print(resp.json())
         return
-    else:
-        print(resp.json())
 
     #Preparing the final message.
     txt_channel_msg: str = f"🚀 Bot {MW_BOT.name} joined the server!"

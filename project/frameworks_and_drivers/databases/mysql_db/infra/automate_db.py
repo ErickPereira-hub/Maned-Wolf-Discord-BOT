@@ -41,7 +41,6 @@ class AutomateMySQLDatabaseCreation:
                             server_desc VARCHAR(1024)
                         )
                     """)
-            with MySQLCursor(scnx) as cursor:
                 cursor.execute(
                     """
                         CREATE TABLE IF NOT EXISTS channels (
@@ -53,11 +52,11 @@ class AutomateMySQLDatabaseCreation:
                             FOREIGN KEY (server_id) REFERENCES servers(server_id)
                         )
                     """)
-            with MySQLCursor(scnx) as cursor:
                 cursor.execute(
                     """
                         CREATE TABLE IF NOT EXISTS members (
-                            member_id BIGINT PRIMARY KEY,
+                            member_id BIGINT PRIMARY KEY AUTO_INCREMENT,
+                            member_id_disc BIGINT,
                             member_name VARCHAR(50),
                             category ENUM("human", "bot"),
                             joined_at DATETIME,
@@ -66,7 +65,6 @@ class AutomateMySQLDatabaseCreation:
                             FOREIGN KEY (server_id) REFERENCES servers(server_id)
                         )
                     """)
-            with MySQLCursor(scnx) as cursor:
                 cursor.execute(
                     """
                         CREATE TABLE IF NOT EXISTS messages (

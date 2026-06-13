@@ -10,15 +10,12 @@ class NewServerIn(Resource):
     
     def post(self):
         self.__args: Dict[str, Any] = HTTP_BODY_ARGS.args_new_server.parse_args()
-        print(self.__args)
         #Checking if everything is ok
         for key, value in self.__args.items():
             if key != "description" and value is None:
                 abort(400, message = "An important information about the server wasn't given")
         
         self.__transformed_data: Dict[str, Any] = NewServerPresenter(NewServerUseCase(self.__args).aggregate_JSON).get_data()
-        pprint(self.__transformed_data)
-        print(1)
         #Sending the dataset to the database
         NewServerInTransaction.send_new_server_data(nw_presenter = self.__transformed_data)
 

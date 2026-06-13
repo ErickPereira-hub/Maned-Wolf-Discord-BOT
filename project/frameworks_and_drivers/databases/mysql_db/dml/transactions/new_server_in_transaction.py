@@ -37,13 +37,19 @@ class NewServerInTransaction:
                                         '{nw_presenter["channels_data"][pos]["category"]}',
                                         '{nw_presenter["channels_data"][pos]["is_nsfw"]}',
                                         {nw_presenter["server_data"]["id"]})''' for pos in range(len(nw_presenter["channels_data"]))]) + ";"}
-            INSERT INTO members VALUES {",".join([f'''(
-                                        {nw_presenter["members_data"][pos]["id"]},
-                                        '{nw_presenter["members_data"][pos]["name"]}',
-                                        '{nw_presenter["members_data"][pos]["category"]}',
-                                        '{nw_presenter["members_data"][pos]["joined_at"]}',
-                                        '{nw_presenter["members_data"][pos]["account_create_at"]}',
-                                        {nw_presenter["server_data"]["id"]})''' for pos in range(len(nw_presenter["members_data"]))]) + ";"}
+            INSERT INTO members 
+            (member_id_disc,
+            member_name,
+            category,
+            joined_at,
+            account_create_at,
+            server_id) VALUES {",".join([f'''(
+                                {nw_presenter["members_data"][pos]["id"]},
+                                '{nw_presenter["members_data"][pos]["name"]}',
+                                '{nw_presenter["members_data"][pos]["category"]}',
+                                '{nw_presenter["members_data"][pos]["joined_at"]}',
+                                '{nw_presenter["members_data"][pos]["account_create_at"]}',
+                                {nw_presenter["server_data"]["id"]})''' for pos in range(len(nw_presenter["members_data"]))]) + ";"}
             IF err_flag = 1 THEN
                 ROLLBACK;
             ELSE
@@ -54,7 +60,5 @@ class NewServerInTransaction:
             print(sql_transaction)
             with MySQLCursor(scnx) as cursor:
                 cursor.execute("DROP PROCEDURE IF EXISTS new_server_transaction")
-            with MySQLCursor(scnx) as cursor:
                 cursor.execute(sql_transaction)
-            with MySQLCursor(scnx) as cursor:
                 cursor.execute("CALL new_server_transaction()")
