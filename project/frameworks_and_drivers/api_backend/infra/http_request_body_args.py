@@ -9,10 +9,8 @@ class HttpRequestBodyArgs:
     def __init__(self):
         #Setting the standard JSON for new server
         self.__ARGS_NEW_SERVER: reqparse.RequestParser = reqparse.RequestParser()
-        self.__load_new_server_json()
-    
-    def __load_new_server_json(self) -> None:
-        self.__info_to_load: Dict[str, Any] = {
+        self.__ARGS_NEW_MSG: reqparse.RequestParser = reqparse.RequestParser()
+        self.__load_new_server_json({
             "server_id": int,
             "server_name": str,
             "description": str,
@@ -27,31 +25,29 @@ class HttpRequestBodyArgs:
             "are_nsfw": list_str,
             "members_id": list_int,
             "channels_id": list_int,
-        }
-        for field, type in self.__info_to_load.items():
+        })
+        self.__load_new_msg_json({
+            "msg_id" : int,
+            "msg_text" : str,
+            "msg_date" : str,
+            "msg_edited_at" : str,
+            "author_id" : int,
+            "channel_id" : int,
+            "server_id" : int
+        })
+    
+    def __load_new_server_json(self, info: Dict[str, Any]) -> None:
+        for field, type in info.items():
             self.__ARGS_NEW_SERVER.add_argument(field, type = type, location = "json", help = HttpRequestBodyArgs.STD_HELP_MSG, required = True)
-        
-        """self.__ARGS_NEW_SERVER.add_argument("server_id", type = int, help = HttpRequestBodyArgs.STD_HELP_MSG, required = True)
-        self.__ARGS_NEW_SERVER.add_argument("server_name", type = str, help = HttpRequestBodyArgs.STD_HELP_MSG)
-        self.__ARGS_NEW_SERVER.add_argument("description", type = str, help = HttpRequestBodyArgs.STD_HELP_MSG)
-        self.__ARGS_NEW_SERVER.add_argument("owner_name", type = str, help = HttpRequestBodyArgs.STD_HELP_MSG)
-        self.__ARGS_NEW_SERVER.add_argument("server_creation_date", type = str, help = HttpRequestBodyArgs.STD_HELP_MSG)
-        for fn in (
-            "members_name",
-            "mcategories",
-            "they_joined_at",
-            "their_account_were_create_at",
-            "channels_name",
-            "types",
-            "ccategories",
-            "are_nsfw"):
-            self.__ARGS_NEW_SERVER.add_argument(fn, type = list_str, location = "json", help = HttpRequestBodyArgs.STD_HELP_MSG)
-        for fn in (
-            "members_id",
-            "channels_id",
-        ):
-            self.__ARGS_NEW_SERVER.add_argument(fn, type = list_int, location = "json", help = HttpRequestBodyArgs.STD_HELP_MSG)"""
+     
+    def __load_new_msg_json(self, info: Dict[str, Any]) -> None:
+        for field, type in info.items():
+            self.__ARGS_NEW_MSG.add_argument(field, type = type, help = HttpRequestBodyArgs.STD_HELP_MSG, required = True)
 
     @property
     def args_new_server(self) -> reqparse.RequestParser:
         return self.__ARGS_NEW_SERVER
+    
+    @property
+    def args_new_msg(self) -> reqparse.RequestParser:
+        return self.__ARGS_NEW_MSG

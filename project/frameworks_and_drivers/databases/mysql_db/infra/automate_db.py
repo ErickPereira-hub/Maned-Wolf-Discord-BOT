@@ -76,7 +76,6 @@ class AutomateMySQLDatabaseCreation:
                             channel_id BIGINT NOT NULL,
                             server_id BIGINT NOT NULL,
                             FOREIGN KEY (server_id) REFERENCES servers(server_id),
-                            FOREIGN KEY (author_id) REFERENCES members (member_id),
                             FOREIGN KEY (channel_id) REFERENCES channels (channel_id)
                         )
                     """)
