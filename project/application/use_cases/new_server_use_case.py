@@ -54,7 +54,6 @@ class NewServerUseCase:
                ChannelEntity(
                    channel_id = self.__JSON["channels_id"][_],
                    channel_name = self.__JSON["channels_name"][_],
-                   type = self.__JSON["types"][_],
                    category = self.__JSON["ccategories"][_],
                    is_nsfw = self.__JSON["are_nsfw"][_],
                    server_id = self.__JSON["server_id"], # <--- From the server

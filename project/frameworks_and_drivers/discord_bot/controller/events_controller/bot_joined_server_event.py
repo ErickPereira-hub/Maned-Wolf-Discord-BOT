@@ -44,7 +44,6 @@ async def on_guild_join(guild: discord.Guild) -> None:
         "their_account_were_create_at": [str(m["account_create_at"]) for m in members],
         "channels_id": [int(c["channel_id"]) for c in channels],
         "channels_name": [str(c["channel_name"]) for c in channels],
-        "types": [str(["type"]) for c in channels],
         "ccategories": [str(c["category"]) for c in channels],
         "are_nsfw": [str(c["is_nsfw"]) for c in channels]
     }

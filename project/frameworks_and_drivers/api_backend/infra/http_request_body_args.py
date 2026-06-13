@@ -23,7 +23,6 @@ class HttpRequestBodyArgs:
             "they_joined_at": list_str,
             "their_account_were_create_at": list_str,
             "channels_name": list_str,
-            "types": list_str,
             "ccategories": list_str,
             "are_nsfw": list_str,
             "members_id": list_int,

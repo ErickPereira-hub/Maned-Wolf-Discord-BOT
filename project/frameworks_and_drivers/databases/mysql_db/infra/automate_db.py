@@ -32,7 +32,7 @@ class AutomateMySQLDatabaseCreation:
                 cursor.execute(
                     """
                         CREATE TABLE IF NOT EXISTS servers (
-                            server_id INT PRIMARY KEY,
+                            server_id BIGINT PRIMARY KEY,
                             server_name VARCHAR(200),
                             member_qtt INT,
                             server_owner_name VARCHAR(200),
@@ -45,12 +45,11 @@ class AutomateMySQLDatabaseCreation:
                 cursor.execute(
                     """
                         CREATE TABLE IF NOT EXISTS channels (
-                            channel_id INT PRIMARY KEY,
+                            channel_id BIGINT PRIMARY KEY,
                             channel_name VARCHAR(50),
-                            type VARCHAR(50),
                             category VARCHAR(1024),
                             is_nsfw ENUM("yes", "no") NOT NULL,
-                            server_id INT NOT NULL,
+                            server_id BIGINT NOT NULL,
                             FOREIGN KEY (server_id) REFERENCES servers(server_id)
                         )
                     """)
@@ -58,12 +57,12 @@ class AutomateMySQLDatabaseCreation:
                 cursor.execute(
                     """
                         CREATE TABLE IF NOT EXISTS members (
-                            member_id INT PRIMARY KEY,
+                            member_id BIGINT PRIMARY KEY,
                             member_name VARCHAR(50),
                             category ENUM("human", "bot"),
                             joined_at DATETIME,
                             account_create_at DATETIME,
-                            server_id INT NOT NULL,
+                            server_id BIGINT NOT NULL,
                             FOREIGN KEY (server_id) REFERENCES servers(server_id)
                         )
                     """)
@@ -71,13 +70,13 @@ class AutomateMySQLDatabaseCreation:
                 cursor.execute(
                     """
                         CREATE TABLE IF NOT EXISTS messages (
-                            message_id INT PRIMARY KEY,
+                            message_id BIGINT PRIMARY KEY,
                             message_text VARCHAR(2048),
                             message_date DATETIME,
                             message_edited_at DATETIME,
-                            author_id INT NOT NULL,
-                            channel_id INT NOT NULL,
-                            server_id INT NOT NULL,
+                            author_id BIGINT NOT NULL,
+                            channel_id BIGINT NOT NULL,
+                            server_id BIGINT NOT NULL,
                             FOREIGN KEY (server_id) REFERENCES servers(server_id),
                             FOREIGN KEY (author_id) REFERENCES members (member_id),
                             FOREIGN KEY (channel_id) REFERENCES channels (channel_id)

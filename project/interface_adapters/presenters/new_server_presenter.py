@@ -34,7 +34,6 @@ class NewServerPresenter(Presenter):
                {
                    "id": c.channel_id,
                    "name": c.channel_name,
-                   "type": c.type,
                    "category": c.category,
                    "is_nsfw": c.is_nsfw
                } for c in self.__cl
