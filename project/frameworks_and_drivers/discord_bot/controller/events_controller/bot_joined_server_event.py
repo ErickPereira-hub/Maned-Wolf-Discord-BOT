@@ -35,7 +35,8 @@ async def on_guild_join(guild: discord.Guild) -> None:
         "server_id": guild.id,
         "server_name": str(guild.name),
         "description": str(guild.description),
-        "owner_name": server_owner.global_name if server_owner is not None else None,
+        "server_creation_date": str(guild.created_at),
+        "owner_name": server_owner.global_name if server_owner is not None else "None",
         "members_id": [int(m["member_id"]) for m in members],
         "members_name": [str(m["member_name"]) for m in members],
         "mcategories": [str(m["category"]) for m in members],
@@ -47,7 +48,7 @@ async def on_guild_join(guild: discord.Guild) -> None:
         "ccategories": [str(c["category"]) for c in channels],
         "are_nsfw": [str(c["is_nsfw"]) for c in channels]
     }
-    pprint(server_data)
+    print(server_data)
     #Sending a request to the API of the BOT
     URL: str = os.getenv("BASE_URL") + "/new-server"
     resp = requests.post(URL, json = server_data)

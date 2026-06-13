@@ -16,10 +16,11 @@ class NewServerIn(Resource):
             if key != "description" and value is None:
                 abort(400, message = "An important information about the server wasn't given")
         
-        self.__transformed_data: Dict[str, Any] = NewServerPresenter(NewServerUseCase(self.__args).aggregate_JSON)
-        
+        self.__transformed_data: Dict[str, Any] = NewServerPresenter(NewServerUseCase(self.__args).aggregate_JSON).get_data()
+        pprint(self.__transformed_data)
+        print(1)
         #Sending the dataset to the database
-        NewServerInTransaction.send_new_server_data(nw_presenter=self.__transformed_data)
+        NewServerInTransaction.send_new_server_data(nw_presenter = self.__transformed_data)
 
         #Must run if everything went well
         self.__GOOD_JSON_RESPONSE: Dict[str, str] = {"message": "Ok"}
