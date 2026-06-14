@@ -3,7 +3,7 @@ from typing import Any, Dict, Tuple
 from project.frameworks_and_drivers.api_backend.infra.http_request_body_args_singleton import HTTP_BODY_ARGS
 from project.frameworks_and_drivers.databases.mysql_db.dml.dml_msg import MessageDML
 
-class NewMsgIn(Resource):
+class Msg(Resource):
     
     def post(self):
         self.__args: Dict[str, Any] = HTTP_BODY_ARGS.args_new_msg.parse_args()

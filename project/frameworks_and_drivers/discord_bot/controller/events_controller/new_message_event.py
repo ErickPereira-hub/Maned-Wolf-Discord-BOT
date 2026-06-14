@@ -24,7 +24,7 @@ async def on_message(msg: Message):
     }
 
     #Doing the request
-    URL: str = os.getenv("BASE_URL") + "/new-msg"
+    URL: str = os.getenv("BASE_URL") + "/msg"
     resp = requests.post(URL, json = message_data)
 
     #If the operation wasn't done

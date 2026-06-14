@@ -10,6 +10,8 @@ class HttpRequestBodyArgs:
         #Setting the standard JSON for new server
         self.__ARGS_NEW_SERVER: reqparse.RequestParser = reqparse.RequestParser()
         self.__ARGS_NEW_MSG: reqparse.RequestParser = reqparse.RequestParser()
+        self.__ARGS_NEW_MEMBER: reqparse.RequestParser = reqparse.RequestParser()
+        self.__ARGS_NEW_CHANNEL: reqparse.RequestParser = reqparse.RequestParser()
         self.__load_new_server_json({
             "server_id": int,
             "server_name": str,
@@ -35,6 +37,21 @@ class HttpRequestBodyArgs:
             "channel_id" : int,
             "server_id" : int
         })
+        self.__load_new_member_json({
+            "member_id_disc" : int,
+            "member_name" : str,
+            "category" : str,
+            "joined_at" : str,
+            "account_create_at" : str,
+            "server_id" : int
+        })
+        self.__load_new_channel_json({
+            "channel_id" : int,
+            "channel_name" : str,
+            "category" : str,
+            "is_nsfw" : str,
+            "server_id" : int
+        })
     
     def __load_new_server_json(self, info: Dict[str, Any]) -> None:
         for field, type in info.items():
@@ -44,6 +61,14 @@ class HttpRequestBodyArgs:
         for field, type in info.items():
             self.__ARGS_NEW_MSG.add_argument(field, type = type, help = HttpRequestBodyArgs.STD_HELP_MSG, required = True)
 
+    def __load_new_member_json(self, info: Dict[str, Any]) -> None:
+        for field, type in info.items():
+            self.__ARGS_NEW_MEMBER.add_argument(field, type = type, help = HttpRequestBodyArgs.STD_HELP_MSG, required = True)
+
+    def __load_new_channel_json(self, info: Dict[str, Any]) -> None:
+        for field, type in info.items():
+            self.__ARGS_NEW_CHANNEL.add_argument(field, type = type, help = HttpRequestBodyArgs.STD_HELP_MSG, required = True)
+
     @property
     def args_new_server(self) -> reqparse.RequestParser:
         return self.__ARGS_NEW_SERVER
@@ -51,3 +76,11 @@ class HttpRequestBodyArgs:
     @property
     def args_new_msg(self) -> reqparse.RequestParser:
         return self.__ARGS_NEW_MSG
+    
+    @property
+    def args_new_member(self) -> reqparse.RequestParser:
+        return self.__ARGS_NEW_MEMBER
+
+    @property
+    def args_new_channel(self) -> reqparse.RequestParser:
+        return self.__ARGS_NEW_CHANNEL

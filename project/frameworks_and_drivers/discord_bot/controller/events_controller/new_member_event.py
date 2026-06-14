@@ -1,0 +1,25 @@
+from project.frameworks_and_drivers.discord_bot.infra.singletons import MW_BOT
+from discord import Member
+from typing import Dict
+import requests
+import os
+
+@MW_BOT.bot.event
+async def on_member_join(member: Member):
+    #Getting the data from the member
+    member_data: Dict[str, str | int] = {
+        "member_id_disc" : member.id,
+        "member_name" : member.global_name,
+        "category" : member.global_name,
+        "joined_at" : str(member.joined_at) if member.joined_at is not None else None,
+        "account_create_at" : str(member.created_at),
+        "server_id" : member.guild.id
+    }
+    
+    #Doing the request
+    URL: str = os.getenv("BASE_URL") + "/member"
+    resp = requests.post(URL, json = member_data)
+
+    #If the operation wasn't done
+    if resp.status_code != 201:
+        await member.send("❌ TROUBLE: Our family of maned wolfs couldn't get your data : ^ ( ")
