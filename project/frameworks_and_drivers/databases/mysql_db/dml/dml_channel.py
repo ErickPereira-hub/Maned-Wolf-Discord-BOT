@@ -43,5 +43,4 @@ class ChannelDML(DatabaseInsertion, DatabaseUpdate, DatabaseDeletion):
                        mysql_password = os.getenv("MYSQL_PASSWORD"),
                        db_name = os.getenv("MYSQL_DB_NAME")) as scnx:
             with MySQLCursor(scnx) as cursor:
-                cursor.execute("DELETE FROM channels WHERE channel_id = %s", (cid,))
-                scnx.commit()
+                cursor.execute("CALL del_channel_transaction(%s)", (cid,))

@@ -12,6 +12,7 @@ class AutomateMySQLDatabaseCreation:
     def create(cls) -> None:
         cls.__create_db()
         cls.__create_tables()
+        cls.__create_procedures()
 
     @classmethod
     def __create_db(cls) -> None:
@@ -79,3 +80,33 @@ class AutomateMySQLDatabaseCreation:
                             FOREIGN KEY (channel_id) REFERENCES channels (channel_id)
                         )
                     """)
+    
+    @classmethod
+    def __create_procedures(cls) -> None:
+        with StrongCnx(
+            mysql_username=os.getenv("MYSQL_USERNAME"),
+            mysql_password=os.getenv("MYSQL_PASSWORD"),
+            db_name = os.getenv("MYSQL_DB_NAME")
+        ) as scnx:
+            with MySQLCursor(scnx) as cursor:
+                cursor.execute("DROP PROCEDURE IF EXISTS del_channel_transaction")
+                cursor.execute(
+                    """
+    CREATE PROCEDURE del_channel_transaction(IN _channel_id BIGINT)
+        BEGIN
+            DECLARE err_flag TINYINT DEFAULT 0;
+            DECLARE CONTINUE HANDLER FOR SQLEXCEPTION
+                BEGIN
+                    SET err_flag = 1;
+                END;
+            START TRANSACTION;
+            DELETE FROM messages WHERE channel_id = _channel_id;
+            DELETE FROM channels WHERE channel_id = _channel_id;
+            IF err_flag = 1 THEN
+                ROLLBACK;
+            ELSE
+                COMMIT;
+            END IF;
+        END
+                    """
+                )
