@@ -26,7 +26,6 @@ class NewServerInTransaction:
             INSERT INTO servers VALUES (
                 {nw_presenter["server_data"]["id"]},
                 '{nw_presenter["server_data"]["name"]}',
-                {nw_presenter["server_data"]["member_qtt"]},
                 '{nw_presenter["server_data"]["owner_name"]}',
                 '{nw_presenter["server_data"]["creation_date"]}',
                 '{str(datetime.utcnow())}',
@@ -36,6 +35,7 @@ class NewServerInTransaction:
                                         '{nw_presenter["channels_data"][pos]["name"]}',
                                         '{nw_presenter["channels_data"][pos]["category"]}',
                                         '{nw_presenter["channels_data"][pos]["is_nsfw"]}',
+                                        '{nw_presenter["channels_data"][pos]["created_at"]}',
                                         {nw_presenter["server_data"]["id"]})''' for pos in range(len(nw_presenter["channels_data"]))]) + ";"}
             INSERT INTO members 
             (member_id_disc,

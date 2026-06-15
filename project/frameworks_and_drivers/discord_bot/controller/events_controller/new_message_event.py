@@ -1,8 +1,8 @@
 from project.frameworks_and_drivers.discord_bot.infra.singletons import MW_BOT
 from discord import Message
 from typing import Dict
-import requests
 import os
+from requests import Response, post
 
 @MW_BOT.bot.event
 async def on_message(msg: Message):
@@ -25,7 +25,7 @@ async def on_message(msg: Message):
 
     #Doing the request
     URL: str = os.getenv("BASE_URL") + "/msg"
-    resp = requests.post(URL, json = message_data)
+    resp: Response = post(URL, json = message_data)
 
     #If the operation wasn't done
     if resp.status_code != 201:

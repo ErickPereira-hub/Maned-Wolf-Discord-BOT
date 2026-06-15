@@ -20,9 +20,9 @@ class NewServerUseCase:
         "their_account_were_create_at": [str(m["account_create_at"]) for m in members],
         "channels_id": [int(c["channel_id"]) for c in channels],
         "channels_name": [str(c["channel_name"]) for c in channels],
-        "types": [str(["type"]) for c in channels],
         "ccategories": [str(c["category"]) for c in channels],
-        "are_nsfw": [str(c["is_nsfw"]) for c in channels]
+        "are_nsfw": [str(c["is_nsfw"]) for c in channels],
+        "ccreated_at": [str(c["created_at"]) for c in channels]
         }
 
         Otherwise, an error will occur and the data won't be processed in the backend of the API.
@@ -38,8 +38,7 @@ class NewServerUseCase:
                 name = self.__JSON["server_name"],
                 description = self.__JSON["description"],
                 owner_name = self.__JSON["owner_name"],
-                created_at = self.__JSON["server_creation_date"],
-                member_qtt = len(self.__JSON["members_id"]) #<--- Evaluates the number of members inside the server
+                created_at = self.__JSON["server_creation_date"]
             ),
             "members_list": [
                 MemberEntity(
@@ -56,6 +55,7 @@ class NewServerUseCase:
                    channel_name = self.__JSON["channels_name"][_],
                    category = self.__JSON["ccategories"][_],
                    is_nsfw = self.__JSON["are_nsfw"][_],
+                   created_at = self.__JSON["ccreated_at"][_],
                    server_id = self.__JSON["server_id"], # <--- From the server
                ) for _ in range(len(self.__JSON["channels_id"]))
             ]

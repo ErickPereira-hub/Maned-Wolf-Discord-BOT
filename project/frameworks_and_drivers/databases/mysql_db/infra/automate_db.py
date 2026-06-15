@@ -34,7 +34,6 @@ class AutomateMySQLDatabaseCreation:
                         CREATE TABLE IF NOT EXISTS servers (
                             server_id BIGINT PRIMARY KEY,
                             server_name VARCHAR(200),
-                            member_qtt INT,
                             server_owner_name VARCHAR(200),
                             creation_date DATETIME,
                             joined_the_bot_since DATETIME DEFAULT NOW(),
@@ -48,6 +47,7 @@ class AutomateMySQLDatabaseCreation:
                             channel_name VARCHAR(50),
                             category VARCHAR(1024),
                             is_nsfw ENUM("yes", "no") NOT NULL,
+                            create_at DATETIME DEFAULT NOW(),
                             server_id BIGINT NOT NULL,
                             FOREIGN KEY (server_id) REFERENCES servers(server_id)
                         )

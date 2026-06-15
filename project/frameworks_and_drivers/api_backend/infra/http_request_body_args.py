@@ -18,6 +18,7 @@ class HttpRequestBodyArgs:
             "description": str,
             "owner_name": str,
             "server_creation_date": str,
+            "ccreated_at": list_str,
             "members_name": list_str,
             "mcategories": list_str,
             "they_joined_at": list_str,

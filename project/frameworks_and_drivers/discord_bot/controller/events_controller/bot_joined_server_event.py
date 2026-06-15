@@ -1,9 +1,9 @@
 from project.frameworks_and_drivers.discord_bot.infra.singletons import MW_BOT
 import discord
 from typing import List, Dict, Any
-import requests
 import os
 from pprint import pprint
+from requests import Response, post
 
 @MW_BOT.bot.event
 async def on_guild_join(guild: discord.Guild) -> None:
@@ -28,6 +28,7 @@ async def on_guild_join(guild: discord.Guild) -> None:
             "channel_name": c.name,
             "type": c.type,
             "category": c.category.name if c.category is not None else None,
+            "created_at": c.created_at,
             "is_nsfw": "yes" if c.is_nsfw() else "no"
             } for c in guild.channels] #<--- List of channels from this server
     
@@ -45,11 +46,12 @@ async def on_guild_join(guild: discord.Guild) -> None:
         "channels_id": [int(c["channel_id"]) for c in channels],
         "channels_name": [str(c["channel_name"]) for c in channels],
         "ccategories": [str(c["category"]) for c in channels],
-        "are_nsfw": [str(c["is_nsfw"]) for c in channels]
+        "are_nsfw": [str(c["is_nsfw"]) for c in channels],
+        "ccreated_at": [str(c["created_at"]) for c in channels]
     }
     #Sending a request to the API of the BOT
     URL: str = os.getenv("BASE_URL") + "/new-server"
-    resp = requests.post(URL, json = server_data)
+    resp: Response = post(URL, json = server_data)
     if resp.status_code != 201:
         if txt_channels:
             await txt_channels[0].send("❌ ERROR: something went bad during the acquisition of data!")

@@ -1,8 +1,8 @@
 from project.frameworks_and_drivers.discord_bot.infra.singletons import MW_BOT
 from discord import Member
 from typing import Dict
-import requests
 import os
+from requests import Response, post
 
 @MW_BOT.bot.event
 async def on_member_join(member: Member):
@@ -18,7 +18,7 @@ async def on_member_join(member: Member):
     
     #Doing the request
     URL: str = os.getenv("BASE_URL") + "/member"
-    resp = requests.post(URL, json = member_data)
+    resp: Response = post(URL, json = member_data)
 
     #If the operation wasn't done
     if resp.status_code != 201:

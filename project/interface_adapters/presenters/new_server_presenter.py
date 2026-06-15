@@ -18,7 +18,6 @@ class NewServerPresenter(Presenter):
                 "name": self.__server.name,
                 "description": self.__server.desc,
                 "owner_name": self.__server.owner_name,
-                "member_qtt": self.__server.member_qtt,
                 "creation_date": self.__server.created_at
             },
             "members_data": [
@@ -35,6 +34,7 @@ class NewServerPresenter(Presenter):
                    "id": c.channel_id,
                    "name": c.channel_name,
                    "category": c.category,
+                   "created_at": c.created_at,
                    "is_nsfw": c.is_nsfw
                } for c in self.__cl
             ]
