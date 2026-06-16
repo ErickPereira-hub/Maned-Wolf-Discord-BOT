@@ -29,5 +29,5 @@ class MemberDML(DatabaseInsertion, DatabaseDeletion):
                        mysql_password = os.getenv("MYSQL_PASSWORD"),
                        db_name = os.getenv("MYSQL_DB_NAME")) as scnx:
             with MySQLCursor(scnx) as cursor:
-                cursor.execute("DELETE FROM members WHERE member_id_disc = %s AND server_id = %s", (mid_disc, server_id))
+                cursor.execute("UPDATE members SET deleted_at = NOW() WHERE member_id_disc = %s AND server_id = %s", (mid_disc, server_id))
                 scnx.commit()

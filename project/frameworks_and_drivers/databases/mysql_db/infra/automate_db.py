@@ -62,6 +62,7 @@ class AutomateMySQLDatabaseCreation:
                             category ENUM("human", "bot"),
                             joined_at DATETIME,
                             account_create_at DATETIME,
+                            deleted_at DATETIME,
                             server_id BIGINT NOT NULL,
                             FOREIGN KEY (server_id) REFERENCES servers(server_id)
                         )

@@ -1,4 +1,6 @@
 #The following imports will call the endpoints of discord. Then, the __init__.py from /frameworks_and_drivers will call this script, linking the endpoints to the main.py file.
+
+#Events
 from project.frameworks_and_drivers.discord_bot.controller.events_controller.infra_event import on_ready
 from project.frameworks_and_drivers.discord_bot.controller.events_controller.bot_joined_server_event import on_guild_join
 from project.frameworks_and_drivers.discord_bot.controller.events_controller.new_message_event import on_message
@@ -9,3 +11,6 @@ from project.frameworks_and_drivers.discord_bot.controller.events_controller.upd
 from project.frameworks_and_drivers.discord_bot.controller.events_controller.rm_member_event import on_member_remove
 from project.frameworks_and_drivers.discord_bot.controller.events_controller.rm_channel_event import on_guild_channel_delete
 from project.frameworks_and_drivers.discord_bot.controller.events_controller.update_channel_event import on_guild_channel_update
+
+#Commands
+from project.frameworks_and_drivers.discord_bot.controller.commands_controller.member_qtt_analytics_command import show_members_qtt

@@ -4,10 +4,12 @@ from project.frameworks_and_drivers.api_backend.controllers.new_server_in import
 from project.frameworks_and_drivers.api_backend.controllers.msg import Msg
 from project.frameworks_and_drivers.api_backend.controllers.member import Member
 from project.frameworks_and_drivers.api_backend.controllers.channel import Channel
+from project.frameworks_and_drivers.api_backend.controllers.member_analysis import MemberAnaysis
 
 routes: Dict[Resource, str] = {
     NewServerIn : "/new-server",
     Msg : "/msg",
     Member : "/member",
-    Channel: "/channel"
+    Channel: "/channel",
+    MemberAnaysis : "/member_analysis"
 }
