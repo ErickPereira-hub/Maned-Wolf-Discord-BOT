@@ -1,13 +1,16 @@
 from project.frameworks_and_drivers.discord_bot.infra.singletons import MW_BOT
 from discord.ext import commands
-from discord import Guild
+from discord import Guild, Embed
 from typing import Dict, Any, Tuple
 import os
 from requests import Response, get
-from project.frameworks_and_drivers.discord_bot.view.members_table_view import MembersTable
+from project.frameworks_and_drivers.discord_bot.view.graphs.members import MembersGraph
+from asyncio import sleep
+from project.frameworks_and_drivers.discord_bot.view.members_table_view import MembersQttView
+from project.frameworks_and_drivers.discord_bot.view.embed_middleware import get_emb_without_author
 
 @MW_BOT.bot.command()
-async def show_members_qtt(ctx: commands.Context, format: str, last_days: int):
+async def show_members_qtt(ctx: commands.Context, format: str, last_days: int = 7):
 
     possib_format: Tuple[str, str] = ("chart", "table")
     if format not in possib_format:
@@ -33,13 +36,45 @@ async def show_members_qtt(ctx: commands.Context, format: str, last_days: int):
         await ctx.reply(f"Something went bad in the backend --> Status: {resp.status_code}")
         return
     
+    ds: Dict[str, Any] = resp.json()
+
     #Encapsulating the data in a beautiful interface and sending it as response
-    view: MembersTable = MembersTable(
-        members_in_dataset = resp.json()["data"],
-        num_of_days = last_days
+    view: MembersQttView = MembersQttView(
+        members_in_dataset = ds["data"],
+        num_of_days = last_days,
+        overall_tot_avg = ds["overall_tot_avg"],
+        overall_tot_std_dev = ds["overall_tot_std_dev"],
+        overall_var_avg = ds["overall_var_avg"],
+        overall_var_std_dev = ds["overall_var_std_dev"]
     )
+
+    if format == "table": #<--- The user wants a table
+        await ctx.reply(str(view))
     
-    await ctx.reply(str(view))
+    if format == "chart": #<--- The user wants a graph
+        #Building the curve
+        MembersGraph.build_curve(
+            days = [data_day[0] for data_day in ds["data"].values()],
+            qtts = [data_day[3] for data_day in ds["data"].values()],
+            server_id = server.id
+        ) #Saves the figure in a repository
+
+        #Preparing the embeding
+        emb, file = get_emb_without_author(
+            title = "🔗 Graphical information about the quantity of members",
+            desc = view.get_desc(into_embed = True),
+            footer_txt = "",
+            img_path = f"{MembersGraph.REPO_PATH}/members_{server.id}.png"
+        )
+        
+        #Replying with the image
+        await ctx.reply(
+            embed = emb,
+            file = file
+        )
+
+        #Deleting the image from the repo
+        os.remove(f"{MembersGraph.REPO_PATH}/members_{server.id}.png")
 
 @show_members_qtt.error
 async def error_show_members_qtt(ctx: commands.Context, ERR: Any):
