@@ -13,4 +13,4 @@ from project.frameworks_and_drivers.discord_bot.controller.events_controller.rm_
 from project.frameworks_and_drivers.discord_bot.controller.events_controller.update_channel_event import on_guild_channel_update
 
 #Commands
-from project.frameworks_and_drivers.discord_bot.controller.commands_controller.member_qtt_analytics_command import show_members_qtt
+from project.frameworks_and_drivers.discord_bot.controller.commands_controller.get_report_members import get_report_members

@@ -2,4 +2,4 @@ from project.frameworks_and_drivers.discord_bot.infra.singletons import MW_BOT
 
 @MW_BOT.bot.event
 async def on_ready() -> None:
-    print("Bot has been tarted!")
+    print("Bot has been started!")

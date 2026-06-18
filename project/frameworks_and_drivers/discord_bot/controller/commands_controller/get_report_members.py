@@ -8,9 +8,12 @@ from project.frameworks_and_drivers.discord_bot.view.graphs.members import Membe
 from asyncio import sleep
 from project.frameworks_and_drivers.discord_bot.view.members_table_view import MembersQttView
 from project.frameworks_and_drivers.discord_bot.view.embed_middleware import get_emb_without_author
+from time import time
 
 @MW_BOT.bot.command()
-async def show_members_qtt(ctx: commands.Context, format: str, last_days: int = 7):
+async def get_report_members(ctx: commands.Context, format: str, last_days: int = 7):
+
+    time_start: float = time()
 
     possib_format: Tuple[str, str] = ("chart", "table")
     if format not in possib_format:
@@ -58,12 +61,15 @@ async def show_members_qtt(ctx: commands.Context, format: str, last_days: int = 
             qtts = [data_day[3] for data_day in ds["data"].values()],
             server_id = server.id
         ) #Saves the figure in a repository
+        
+        time_end: float = time()
+        t_interval: float = time_end - time_start
 
         #Preparing the embeding
         emb, file = get_emb_without_author(
             title = "🔗 Graphical information about the quantity of members",
             desc = view.get_desc(into_embed = True),
-            footer_txt = "",
+            footer_txt = f"Backend latency: {t_interval:.4f} sec",
             img_path = f"{MembersGraph.REPO_PATH}/members_{server.id}.png"
         )
         
@@ -76,8 +82,8 @@ async def show_members_qtt(ctx: commands.Context, format: str, last_days: int = 
         #Deleting the image from the repo
         os.remove(f"{MembersGraph.REPO_PATH}/members_{server.id}.png")
 
-@show_members_qtt.error
-async def error_show_members_qtt(ctx: commands.Context, ERR: Any):
+@get_report_members.error
+async def error_get_report_members(ctx: commands.Context, ERR: Any):
 
     END_MSG: str = """\n
 The command has the format: wolf?show_members_qtt format last_days. For example:\n
@@ -87,4 +93,4 @@ Instead of table, you can use a chart to see the data in a chart!"""
     if isinstance(ERR, commands.MissingRequiredArgument):
         await ctx.reply("❌ WRONG COMMAND: you forgot to define all parameters." + END_MSG)
     elif isinstance(ERR, commands.BadArgument):
-        await ctx.reply("❌ WRONG COMMAND: the third parameter must be an number" + END_MSG)
+        await ctx.reply("❌ WRONG COMMAND: the third parameter must be a number" + END_MSG)
