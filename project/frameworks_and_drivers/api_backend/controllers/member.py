@@ -2,7 +2,7 @@ from flask_restful import abort, Resource
 from typing import Any, Dict, Tuple
 from project.frameworks_and_drivers.api_backend.infra.http_request_body_args_singleton import HTTP_BODY_ARGS
 from project.frameworks_and_drivers.databases.mysql_db.dml.dml_member import MemberDML
-from flask import request
+from flask import request, Response
 
 class Member(Resource):
     
@@ -10,7 +10,7 @@ class Member(Resource):
         super().__init__()
         self.__MEMBER_DB_OBJ: MemberDML = MemberDML()
 
-    def post(self):
+    def post(self) -> Response:
         self.__args: Dict[str, Any] = HTTP_BODY_ARGS.args_new_member.parse_args()
         #Checking if everything is ok with the message
         self.__important: Tuple[str] = ("member_id_disc", "server_id")
@@ -32,7 +32,7 @@ class Member(Resource):
         self.__GOOD_JSON_RESPONSE: Dict[str, str] = {"status": "Ok", "message": f"Member {self.__args["member_name"]} joined in"}
         return self.__GOOD_JSON_RESPONSE, 201
 
-    def delete(self):
+    def delete(self) -> Response:
         self.__member_id: int | None = request.args.get("member_id", type = int)
         self.__server_id: int | None = request.args.get("server_id", type = int)
         #Checking the id

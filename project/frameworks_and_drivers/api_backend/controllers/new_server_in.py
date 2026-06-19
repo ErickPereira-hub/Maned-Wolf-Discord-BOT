@@ -5,10 +5,11 @@ from pprint import pprint
 from project.interface_adapters.presenters.new_server_presenter import NewServerPresenter
 from project.application.use_cases.new_server_use_case import NewServerUseCase
 from project.frameworks_and_drivers.databases.mysql_db.dml.transactions.new_server_in_transaction import NewServerInTransaction
+from flask import Response
 
 class NewServerIn(Resource):
     
-    def post(self):
+    def post(self) -> Response:
         self.__args: Dict[str, Any] = HTTP_BODY_ARGS.args_new_server.parse_args()
         #Checking if everything is ok
         for key, value in self.__args.items():

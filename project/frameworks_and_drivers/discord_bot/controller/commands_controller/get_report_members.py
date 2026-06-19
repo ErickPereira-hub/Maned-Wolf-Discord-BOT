@@ -5,7 +5,6 @@ from typing import Dict, Any, Tuple
 import os
 from requests import Response, get
 from project.frameworks_and_drivers.discord_bot.view.graphs.members import MembersGraph
-from asyncio import sleep
 from project.frameworks_and_drivers.discord_bot.view.members_table_view import MembersQttView
 from project.frameworks_and_drivers.discord_bot.view.embed_middleware import get_emb_without_author
 from time import time

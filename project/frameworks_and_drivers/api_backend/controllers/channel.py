@@ -2,7 +2,7 @@ from flask_restful import abort, Resource
 from typing import Any, Dict, Tuple
 from project.frameworks_and_drivers.api_backend.infra.http_request_body_args_singleton import HTTP_BODY_ARGS
 from project.frameworks_and_drivers.databases.mysql_db.dml.dml_channel import ChannelDML
-from flask import request
+from flask import request, Response
 
 class Channel(Resource):
     
@@ -10,7 +10,7 @@ class Channel(Resource):
         super().__init__()
         self.__CHANNEL_DB_OBJ: ChannelDML = ChannelDML()
 
-    def post(self):
+    def post(self) -> Response:
         #Grabbing the data from the discord endpoint
         self.__args: Dict[str, Any] = HTTP_BODY_ARGS.args_new_channel.parse_args()
         #Checking if everything is ok with the message
@@ -32,7 +32,7 @@ class Channel(Resource):
         self.__GOOD_JSON_RESPONSE: Dict[str, str] = {"status": "Ok", "message": f"Channel {self.__args["channel_name"]} has been added!"}
         return self.__GOOD_JSON_RESPONSE, 201
     
-    def delete(self):
+    def delete(self) -> Response:
         self.__cid: int | None = request.args.get("channel_id", type = int)
         #Checking if the id came
         if self.__cid is None:
@@ -40,7 +40,7 @@ class Channel(Resource):
         self.__CHANNEL_DB_OBJ.del_in_db(self.__cid)
         return {"message": f"Channel of id {self.__cid} has been deleted"}, 200
     
-    def patch(self):
+    def patch(self) -> Response:
         #Capturing the data from the new version of the channel
         self.__cid: int | None = request.args.get("channel_id", type = int)
         self.__new_name: str | None = request.args.get("new_name", type = str)

@@ -14,3 +14,4 @@ from project.frameworks_and_drivers.discord_bot.controller.events_controller.upd
 
 #Commands
 from project.frameworks_and_drivers.discord_bot.controller.commands_controller.get_report_members import get_report_members
+from project.frameworks_and_drivers.discord_bot.controller.commands_controller.predict_members_qtt_between import predict_members_qtt_between
