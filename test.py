@@ -1,1 +1,1 @@
-print(list(zip([1, 2, 3], [3, 2, 1])))
+print(int(0.6))

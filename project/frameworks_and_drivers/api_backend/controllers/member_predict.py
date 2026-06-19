@@ -15,8 +15,8 @@ class MemberPredict(Resource):
         self.__day: int = request.args.get("day", type = int)
 
         #Unabling bad requests
-        if self.__day > 7 or self.__day is None:
-            abort(400, message = "The maximum for 'to' is 7 and it must be an integer")
+        if self.__day > 3 or self.__day < 1 or self.__day is None:
+            abort(400, message = "The maximum for 'day' is 3 and it must be an integer")
         if self.__sid is None:
             abort(400, message = "server id must be present")
 
@@ -27,7 +27,7 @@ class MemberPredict(Resource):
         #Checking the number of days
         if len(self.__dataset) < 10:
             abort(403, message = "Number of days is too slow!") #<--- Forbidden Access if the number of days is small because we need a large dataset as the base of the prediction.
-        pprint(self.__dataset_completed)
+        
         #Filtering the data
         self.__qtt_arr: List[int] = [data[3] for data in self.__dataset_completed["data"].values()]
         self.__qtt_pos: List[int] = [pos + 1 for pos in range(len(self.__qtt_arr))]
@@ -35,7 +35,7 @@ class MemberPredict(Resource):
 
             #Doing the prediction
         self.__resp_prediction: Dict[str, float | int] = predict_poly_reg_use_case(
-            input = len(self.__points) + self.__day,
+            input = max(self.__qtt_pos) + self.__day,
             dataset = self.__points
             )
 

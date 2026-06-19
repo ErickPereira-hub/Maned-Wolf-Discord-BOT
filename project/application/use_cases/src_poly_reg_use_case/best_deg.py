@@ -8,14 +8,14 @@ def get_best_deg_info(dataset: List[Tuple[int | float , int | float]], from_deg:
     for deg in range(from_deg, until_deg + 1):
         rf: RegressionFactory = RegressionFactory(dataset, deg)
         poly: Polynomial = rf.get_best_poly()
-        ERROR: int | float = get_error(dataset, poly)
+        ERROR: int | float = get_error(dataset, poly, training_data = True)
         relation.update({poly : ERROR})
     MIN_ERR = min(err for err in relation.values())
     for poly, ERR in relation.items():
         if ERR == MIN_ERR:
             resp: Dict[str, Any] = {
                 "polynomial": poly,
-                "ERROR": ERR
+                "ERROR": get_error(dataset, poly)
             }
             return resp
 

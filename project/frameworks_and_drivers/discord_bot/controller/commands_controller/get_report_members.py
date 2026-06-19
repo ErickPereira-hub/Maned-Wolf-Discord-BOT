@@ -82,7 +82,7 @@ async def get_report_members(ctx: commands.Context, format: str, last_days: int 
         os.remove(f"{MembersGraph.REPO_PATH}/members_{server.id}.png")
 
 @get_report_members.error
-async def error_get_report_members(ctx: commands.Context, ERR: Any):
+async def error_get_report_members(ctx: commands.Context, ERR: Exception):
 
     END_MSG: str = """\n
 The command has the format: wolf?show_members_qtt format last_days. For example:\n
