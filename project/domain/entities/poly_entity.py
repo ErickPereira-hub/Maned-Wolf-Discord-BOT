@@ -10,10 +10,10 @@ class Polynomial:
         self.__rep: str = "p(x) = "
         for ind, coeff in enumerate(self.__coeffs):
             if ind == 0:
-                self.__rep += f"{coeff:.2f}"
+                self.__rep += f"{coeff:.4f}"
             else:
                 if coeff != 0:
-                    self.__rep += " - " + f"{(-1)*coeff:.2f}" + f"x^{ind}" if coeff < 0 else " + " + f"{coeff:.2f}" + f"x^{ind}"
+                    self.__rep += " - " + f"{(-1)*coeff:.4f}" + f"x^{ind}" if coeff < 0 else " + " + f"{coeff:.4f}" + f"x^{ind}"
         return self.__rep
     
     def get_response_at(self, input: int | float) -> int | float:

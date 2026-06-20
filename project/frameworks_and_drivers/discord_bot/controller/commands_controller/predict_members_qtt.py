@@ -1,7 +1,7 @@
 from project.frameworks_and_drivers.discord_bot.infra.singletons import MW_BOT
 from discord.ext import commands
 from discord import Guild
-from typing import Dict, Any, Tuple
+from typing import Dict, Any
 from requests import Response, get
 from time import time
 import os

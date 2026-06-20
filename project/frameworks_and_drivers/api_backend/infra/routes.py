@@ -6,11 +6,13 @@ from project.frameworks_and_drivers.api_backend.controllers.member import Member
 from project.frameworks_and_drivers.api_backend.controllers.channel import Channel
 from project.frameworks_and_drivers.api_backend.controllers.member_analysis import MemberAnaysis
 from project.frameworks_and_drivers.api_backend.controllers.member_predict import MemberPredict
+from project.frameworks_and_drivers.api_backend.controllers.member_poisson import MemberPoisson
 routes: Dict[Resource, str] = {
     NewServerIn : "/new-server",
     Msg : "/msg",
     Member : "/member",
     Channel: "/channel",
     MemberAnaysis : "/member_analysis",
-    MemberPredict : "/member_predict"
+    MemberPredict : "/member_predict",
+    MemberPoisson : "/member_poisson"
 }

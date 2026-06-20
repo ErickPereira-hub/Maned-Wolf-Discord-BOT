@@ -1,6 +1,6 @@
 from project.frameworks_and_drivers.discord_bot.infra.singletons import MW_BOT
 from discord.ext import commands
-from discord import Guild, Embed
+from discord import Guild
 from typing import Dict, Any, Tuple
 import os
 from requests import Response, get
