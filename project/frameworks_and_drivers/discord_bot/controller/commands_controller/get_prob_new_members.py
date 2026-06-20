@@ -87,4 +87,4 @@ parameter can be ignored, not showing the figure by default, Both from_qtt and u
     if isinstance(ERR, commands.MissingRequiredArgument):
         await ctx.reply("❌ WRONG COMMAND: you forgot to define all parameters." + END_MSG)
     elif isinstance(ERR, commands.BadArgument):
-        await ctx.reply("❌ WRONG COMMAND: the third parameter must be a number" + END_MSG)
+        await ctx.reply("❌ WRONG COMMAND: the first and second parameters must be numbers" + END_MSG)

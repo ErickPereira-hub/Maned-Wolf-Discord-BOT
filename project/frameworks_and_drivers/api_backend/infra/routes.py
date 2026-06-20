@@ -7,6 +7,8 @@ from project.frameworks_and_drivers.api_backend.controllers.channel import Chann
 from project.frameworks_and_drivers.api_backend.controllers.member_analysis import MemberAnaysis
 from project.frameworks_and_drivers.api_backend.controllers.member_predict import MemberPredict
 from project.frameworks_and_drivers.api_backend.controllers.member_poisson import MemberPoisson
+from project.frameworks_and_drivers.api_backend.controllers.top_active_ch import TopActiveCh
+
 routes: Dict[Resource, str] = {
     NewServerIn : "/new-server",
     Msg : "/msg",
@@ -14,5 +16,6 @@ routes: Dict[Resource, str] = {
     Channel: "/channel",
     MemberAnaysis : "/member_analysis",
     MemberPredict : "/member_predict",
-    MemberPoisson : "/member_poisson"
+    MemberPoisson : "/member_poisson",
+    TopActiveCh : "/top_active_ch"
 }

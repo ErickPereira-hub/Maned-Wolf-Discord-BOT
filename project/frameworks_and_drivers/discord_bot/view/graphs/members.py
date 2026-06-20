@@ -1,9 +1,8 @@
 import matplotlib.pyplot as plt
-from project.domain.interfaces.graphs_interface.curve_interface import GraphCurveInterface
 from typing import List, Tuple
 from project.frameworks_and_drivers.discord_bot.view.graphs.graph import Graph
 
-class MembersGraph(GraphCurveInterface, Graph):
+class MembersGraph(Graph):
 
     REPO_PATH: str = "project/img_repo"
 
