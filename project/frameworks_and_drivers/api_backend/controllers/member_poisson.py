@@ -1,11 +1,8 @@
 from flask_restful import Resource, abort
 from flask import Response, request
 from project.frameworks_and_drivers.databases.mysql_db.dql.member_dql import MemberDQL
-from typing import Tuple, Dict, List, Any
-from project.frameworks_and_drivers.api_backend.middlewares.acumulative_freq_middleware import add_acum_freq_middleware
-from project.application.use_cases.predict_poly_reg_use_case import predict_poly_reg_use_case
-from pprint import pprint
-from project.application.use_cases.poisson_member_use_case import PoissonMemberUseCase
+from typing import Tuple, Dict, List
+from project.application.poisson_member import PoissonMember
 
 class MemberPoisson(Resource):
 
@@ -38,9 +35,9 @@ class MemberPoisson(Resource):
         if len(self.__incrs) < 7:
             abort(403, message = "You must have at least one weak of member data before doing this operation")
         
-        pm_use_case: PoissonMemberUseCase = PoissonMemberUseCase()
+        pm: PoissonMember = PoissonMember()
 
-        self.__prob: float = pm_use_case.get_poisson_in_range(
+        self.__prob: float = pm.get_poisson_in_range(
             from_qtt = self.__from_qtt,
             until_qtt = self.__until,
             incrs = self.__incrs)
@@ -63,7 +60,7 @@ class MemberPoisson(Resource):
         self.__dist_discrete_points: List[Tuple[int, float]] = list(zip(
             [pos for pos in self.__region],
             [
-                pm_use_case.get_poisson_single_prob(input_qtt = pos, incrs = self.__incrs) for pos in self.__region
+                pm.get_poisson_single_prob(input_qtt = pos, incrs = self.__incrs) for pos in self.__region
             ]))
         self.__resp: Dict[str, str | List[Tuple[int, float]]] = {
             "message" : "ok",

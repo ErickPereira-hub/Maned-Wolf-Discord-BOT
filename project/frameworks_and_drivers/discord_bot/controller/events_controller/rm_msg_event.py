@@ -1,6 +1,5 @@
 from project.frameworks_and_drivers.discord_bot.infra.singletons import MW_BOT
 import discord
-from typing import Dict
 from requests import Response, delete
 import os
 

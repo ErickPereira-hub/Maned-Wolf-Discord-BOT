@@ -4,7 +4,6 @@ from project.frameworks_and_drivers.databases.mysql_db.dql.member_dql import Mem
 from typing import Tuple, Dict, List, Any
 from project.frameworks_and_drivers.api_backend.middlewares.acumulative_freq_middleware import add_acum_freq_middleware
 from project.application.use_cases.predict_poly_reg_use_case import predict_poly_reg_use_case
-from pprint import pprint
 
 class MemberPredict(Resource):
 

@@ -1,8 +1,7 @@
 from project.application.utils.poisson_prob import poisson
 from typing import List
-from project.domain.entities.member_entity import MemberEntity
 
-class PoissonMemberUseCase:
+class PoissonMember:
 
     def __init__(self):
         self.__avg: float | int | None = None

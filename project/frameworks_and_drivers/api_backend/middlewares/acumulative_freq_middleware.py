@@ -1,4 +1,4 @@
-from typing import Dict, Tuple, List
+from typing import Dict, Tuple
 from project.application.utils.std_deviation import get_std_deviation
 
 def add_acum_freq_middleware(resp_input: Dict[str, Tuple[int, int, int]]) -> Dict[str, float | Dict[str, Tuple[int, int, int, int]]]:
