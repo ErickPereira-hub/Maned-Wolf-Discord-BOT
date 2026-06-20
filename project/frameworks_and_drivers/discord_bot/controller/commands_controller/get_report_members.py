@@ -1,11 +1,11 @@
 from project.frameworks_and_drivers.discord_bot.infra.singletons import MW_BOT
 from discord.ext import commands
-from discord import Guild
+from discord import Guild, Member
 from typing import Dict, Any, Tuple
 import os
 from requests import Response, get
 from project.frameworks_and_drivers.discord_bot.view.graphs.members import MembersGraph
-from project.frameworks_and_drivers.discord_bot.view.members_table_view import MembersQttView
+from project.frameworks_and_drivers.discord_bot.view.members_qtt_view import MembersQttView
 from project.frameworks_and_drivers.discord_bot.view.embed_middleware import get_emb_without_author
 from time import time
 
@@ -25,7 +25,8 @@ async def get_report_members(ctx: commands.Context, format: str, last_days: int 
 
     #Getting and checking the server
     server: Guild = ctx.guild
-    if server is None:
+    author: Member = ctx.author
+    if server is None or author is None:
         await ctx.reply("Access not allowed due to discord permissions")
         return
 
@@ -55,10 +56,11 @@ async def get_report_members(ctx: commands.Context, format: str, last_days: int 
     
     if format == "chart": #<--- The user wants a graph
         #Building the curve
-        MembersGraph.build_curve(
+        MembersGraph.build_curve_qtt(
             days = [data_day[0] for data_day in ds["data"].values()],
             qtts = [data_day[3] for data_day in ds["data"].values()],
-            server_id = server.id
+            server_id = server.id,
+            author_id = author.id
         ) #Saves the figure in a repository
         
         time_end: float = time()
@@ -69,7 +71,7 @@ async def get_report_members(ctx: commands.Context, format: str, last_days: int 
             title = "🔗 Graphical information about the quantity of members",
             desc = view.get_desc(into_embed = True),
             footer_txt = f"Backend latency: {t_interval:.4f} sec",
-            img_path = f"{MembersGraph.REPO_PATH}/members_{server.id}.png"
+            img_path = f"{MembersGraph.REPO_PATH}/members_{server.id}{author.id}.png"
         )
         
         #Replying with the image
@@ -79,7 +81,7 @@ async def get_report_members(ctx: commands.Context, format: str, last_days: int 
         )
 
         #Deleting the image from the repo
-        os.remove(f"{MembersGraph.REPO_PATH}/members_{server.id}.png")
+        os.remove(f"{MembersGraph.REPO_PATH}/members_{server.id}{author.id}.png")
 
 @get_report_members.error
 async def error_get_report_members(ctx: commands.Context, ERR: Exception):

@@ -23,7 +23,7 @@ class PoissonMemberUseCase:
         self.__avg = self.__get_avg_for_last_days(incrs = incrs, last_days_num = last_days)
         
         #Checking if the range of quantities are following their constraints
-        if from_qtt > until_qtt or from_qtt < 1:
+        if from_qtt > until_qtt or from_qtt < 0:
             raise ValueError("from_qtt and until_qtt aren't following their constraints")
         if not isinstance(from_qtt, int) or not isinstance(until_qtt, int):
             raise TypeError("Wrong type for from_qtt or until_qtt")
