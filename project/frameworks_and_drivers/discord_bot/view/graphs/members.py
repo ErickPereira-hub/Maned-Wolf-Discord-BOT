@@ -9,9 +9,7 @@ class MembersGraph(Graph):
     @classmethod
     def build_curve_qtt(cls, days: List[str], qtts: List[int], server_id: int, author_id: int) -> None:
         days_eq: List[int] = [pos + 1 for pos in range(len(days))]
-        plt.style.use("dark_background") #<--- setting the style of the graph
-        plt.rcParams["figure.facecolor"] = cls.BACKGROUND_COLOR
-        plt.rcParams["axes.facecolor"] = cls.FOREGROUND_COLOR
+        cls.define_dark_style()
         plt.plot(days_eq, qtts, color = cls.WEAK_COLOR, linewidth = 2) #<--- Plotting the graph
         plt.xlabel("Time (days)")
         plt.ylabel("Quantity of members")
@@ -24,9 +22,7 @@ class MembersGraph(Graph):
         probs: List[float] = [100 * data[1] for data in dataset]
         range_qtt: List[int] = [qtt for qtt in range(from_qtt, until_qtt + 1)]
         range_prob: List[float] = probs[from_qtt : until_qtt + 1]
-        plt.style.use("dark_background")
-        plt.rcParams["figure.facecolor"] = cls.BACKGROUND_COLOR
-        plt.rcParams["axes.facecolor"] = cls.FOREGROUND_COLOR
+        cls.define_dark_style()
         plt.bar(qtts, probs, width = 1, color = cls.WEAK_COLOR, edgecolor = cls.EDGE_COLOR, linewidth = 2.5, zorder = 0)
         plt.bar(range_qtt, range_prob, width = 1, color = cls.STRONG_COLOR, edgecolor = cls.EDGE_COLOR, linewidth = 2.5, zorder = 1)
         plt.xlabel("quantity of entrances")

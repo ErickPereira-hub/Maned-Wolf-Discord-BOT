@@ -1,17 +1,20 @@
 from project.frameworks_and_drivers.discord_bot.infra.singletons import MW_BOT
 from discord.ext import commands
-from discord import Guild
+from discord import Guild, Member
 from typing import Dict
 from requests import Response, get
 from time import time
 import os
+from project.frameworks_and_drivers.discord_bot.view.embed_middleware import get_emb_without_author
+from project.frameworks_and_drivers.discord_bot.view.graphs.channels import ChannelsGraph
 
 @MW_BOT.bot.command()
-async def get_cat_qtt(ctx: commands.Context):
+async def get_cat_qtt(ctx: commands.Context, chart: str = "no"):
 
     server: Guild | None = ctx.guild
+    author: Member | None = ctx.author
 
-    if server is None:
+    if server is None or author is None:
         await ctx.reply("❌ Access not allowed due to discord permissions")
         return
     
@@ -37,15 +40,41 @@ async def get_cat_qtt(ctx: commands.Context):
     voice_ch_qtt: int = data["Voice channels"]
     tot_qtt: int = txt_ch_qtt + voice_ch_qtt
 
+    if chart != "chart":
+
+        t_end: float = time()
+        t_interval: int = t_end - t_start
+
+        MSG: str = f"""
+        🔗 Category information:
+        Quantity of channels (text and voice channels): {tot_qtt}\n
+        Quantity of voice channels: {voice_ch_qtt} ( {(100 * voice_ch_qtt / tot_qtt):.2f} % )
+        Quantity of text channels: {txt_ch_qtt} ( {(100 * txt_ch_qtt / tot_qtt):.2f} % )\n
+        Backend Latency: {(1000 * t_interval):.0f} ms
+        """
+
+        await ctx.reply(MSG)
+        return
+    
+    ChannelsGraph.build_cat_pie(
+        txt_ch_qtt = txt_ch_qtt,
+        voice_ch_qtt = voice_ch_qtt,
+        server_id = server.id,
+        author_id = author.id
+    )
+
+    #Taking the time
     t_end: float = time()
-    t_interval: int = t_end - t_start
+    t_interval: float = t_end - t_start
+    
+    #Capturing the view with the image, delivering it to discord and deleting the image
+    IMG_PATH: str = ChannelsGraph.REPO_PATH + f"/channels_cat_{server.id}{author.id}.png"
+    emb, file = get_emb_without_author(
+        title = "Quantities of channels by category",
+        desc = f"",
+        footer_txt = f"Backend Latency: {(1000 * t_interval):.2f} ms",
+        img_path = IMG_PATH
+    )
 
-    MSG: str = f"""
-    🔗 Category information:
-    Quantity of channels (text and voice channels): {tot_qtt}\n
-    Quantity of voice channels: {voice_ch_qtt} ( {(100 * voice_ch_qtt / tot_qtt):.2f} % )
-    Quantity of text channels: {txt_ch_qtt} ( {(100 * txt_ch_qtt / tot_qtt):.2f} % )\n
-    Backend Latency: {(1000 * t_interval):.0f} sec
-    """
-
-    await ctx.reply(MSG)
+    await ctx.reply(embed = emb, file = file)
+    os.remove(IMG_PATH) #<--- Deletes the image

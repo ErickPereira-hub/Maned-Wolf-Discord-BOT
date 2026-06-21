@@ -1,17 +1,20 @@
 from project.frameworks_and_drivers.discord_bot.infra.singletons import MW_BOT
 from discord.ext import commands
-from discord import Guild
+from discord import Guild, Member
 from typing import Dict
 from requests import Response, get
 from time import time
 import os
+from project.frameworks_and_drivers.discord_bot.view.graphs.channels import ChannelsGraph
+from project.frameworks_and_drivers.discord_bot.view.embed_middleware import get_emb_without_author
 
 @MW_BOT.bot.command()
-async def get_nsfw_qtt(ctx: commands.Context):
+async def get_nsfw_qtt(ctx: commands.Context, chart = "no"):
 
     server: Guild | None = ctx.guild
+    author: Member | None = ctx.author
 
-    if server is None:
+    if server is None or author is None:
         await ctx.reply("❌ Access not allowed due to discord permissions")
         return
     
@@ -37,14 +40,40 @@ async def get_nsfw_qtt(ctx: commands.Context):
     nsfw_no_ch_qtt: int = data["no"]
     tot_qtt: int = nsfw_yes_ch_qtt + nsfw_no_ch_qtt
 
+    if chart != "chart":
+
+        t_end: float = time()
+        t_interval: int = t_end - t_start
+
+        MSG: str = f"""
+        🔗 NSFW information:
+        Quantity of NSFW channels: {nsfw_yes_ch_qtt} ( {(100 * nsfw_yes_ch_qtt / tot_qtt):.2f} % )
+        Quantity of non NSFW channels: {nsfw_no_ch_qtt} ( {(100 * nsfw_no_ch_qtt / tot_qtt):.2f} % )\n
+        Backend Latency: {(1000 * t_interval):.0f} ms
+        """
+
+        await ctx.reply(MSG)
+        return
+    
+    ChannelsGraph.build_nsfw_pie(
+        yes_ch_qtt = nsfw_yes_ch_qtt,
+        no_ch_qtt = nsfw_no_ch_qtt,
+        server_id = server.id,
+        author_id = author.id
+    )
+
+    #Taking the time
     t_end: float = time()
-    t_interval: int = t_end - t_start
+    t_interval: float = t_end - t_start
+    
+    #Capturing the view with the image, delivering it to discord and deleting the image
+    IMG_PATH: str = ChannelsGraph.REPO_PATH + f"/channels_nsfw_{server.id}{author.id}.png"
+    emb, file = get_emb_without_author(
+        title = "Quantity of NSFW and non NSFW channels",
+        desc = f"",
+        footer_txt = f"Backend Latency: {(1000 * t_interval):.2f} ms",
+        img_path = IMG_PATH
+    )
 
-    MSG: str = f"""
-    🔗 NSFW information:
-    Quantity of NSFW channels: {nsfw_yes_ch_qtt} ( {(100 * nsfw_yes_ch_qtt / tot_qtt):.2f} % )
-    Quantity of non NSFW channels: {nsfw_no_ch_qtt} ( {(100 * nsfw_no_ch_qtt / tot_qtt):.2f} % )\n
-    Backend Latency: {(1000 * t_interval):.0f} sec
-    """
-
-    await ctx.reply(MSG)
+    await ctx.reply(embed = emb, file = file)
+    os.remove(IMG_PATH) #<--- Deletes the image

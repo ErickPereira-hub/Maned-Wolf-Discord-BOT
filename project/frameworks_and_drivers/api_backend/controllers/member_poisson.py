@@ -17,10 +17,10 @@ class MemberPoisson(Resource):
         self.__server_id: int | None = request.args.get("server_id", type = int)
         self.__from_qtt: int | None = request.args.get("from_qtt", type = int)
         self.__until: int | None = request.args.get("until", type = int)
-        self.__show: int | None = request.args.get("show", type = str)
+        self.__chart: int | None = request.args.get("chart", type = str)
 
         #Checking the income data
-        input: Tuple[int, ...] = (self.__show, self.__server_id, self.__from_qtt, self.__until)
+        input: Tuple[int, ...] = (self.__chart, self.__server_id, self.__from_qtt, self.__until)
         for data in input:
             if data is None:
                 abort(400, message = "all query parameters must be filled")
@@ -43,7 +43,7 @@ class MemberPoisson(Resource):
             incrs = self.__incrs)
 
         #If the requester doesn't want to see the image
-        if self.__show != "show":
+        if self.__chart != "chart":
             
             self.__resp: Dict[str, str | float] = {
                 "data" : self.__prob,

@@ -1,6 +1,6 @@
 from typing import Dict
 from flask_restful import Resource
-from project.frameworks_and_drivers.api_backend.controllers.new_server_in import NewServerIn
+from project.frameworks_and_drivers.api_backend.controllers.server import Server
 from project.frameworks_and_drivers.api_backend.controllers.msg import Msg
 from project.frameworks_and_drivers.api_backend.controllers.member import Member
 from project.frameworks_and_drivers.api_backend.controllers.channel import Channel
@@ -8,10 +8,10 @@ from project.frameworks_and_drivers.api_backend.controllers.member_analysis impo
 from project.frameworks_and_drivers.api_backend.controllers.member_predict import MemberPredict
 from project.frameworks_and_drivers.api_backend.controllers.member_poisson import MemberPoisson
 from project.frameworks_and_drivers.api_backend.controllers.top_active_ch import TopActiveCh
-from project.frameworks_and_drivers.api_backend.controllers.channel_metrics import ChannelMetrics
+from project.frameworks_and_drivers.api_backend.controllers.channel_analysis import ChannelAnalysis
 
 routes: Dict[Resource, str] = {
-    NewServerIn : "/new-server",
+    Server : "/server",
     Msg : "/msg",
     Member : "/member",
     Channel: "/channel",
@@ -19,5 +19,5 @@ routes: Dict[Resource, str] = {
     MemberPredict : "/member/predict",
     MemberPoisson : "/member/poisson",
     TopActiveCh : "/channel/top_active",
-    ChannelMetrics : "/channel/analysis"
+    ChannelAnalysis : "/channel/analysis"
 }

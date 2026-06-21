@@ -50,7 +50,7 @@ async def on_guild_join(guild: discord.Guild) -> None:
         "ccreated_at": [str(c["created_at"]) for c in channels]
     }
     #Sending a request to the API of the BOT
-    URL: str = os.getenv("BASE_URL") + "/new-server"
+    URL: str = os.getenv("BASE_URL") + "/server"
     resp: Response = post(URL, json = server_data)
     if resp.status_code != 201:
         if txt_channels:

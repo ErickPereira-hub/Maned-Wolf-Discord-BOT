@@ -10,7 +10,7 @@ from project.frameworks_and_drivers.discord_bot.view.graphs.members import Membe
 from project.frameworks_and_drivers.discord_bot.view.embed_middleware import get_emb_without_author
 
 @MW_BOT.bot.command()
-async def get_prob_new_members(ctx: commands.Context, from_qtt: int, until_qtt: int, show: str = "no"):
+async def get_prob_new_members(ctx: commands.Context, from_qtt: int, until_qtt: int, chart: str = "no"):
     
     #Checking the parameters
     if from_qtt < 0 or until_qtt < from_qtt:
@@ -30,7 +30,7 @@ async def get_prob_new_members(ctx: commands.Context, from_qtt: int, until_qtt: 
     await ctx.reply(PREP_MSG)
     
     #Calling the data throughout the API
-    URL: str = os.getenv("BASE_URL") + f"/member/poisson?server_id={server.id}&from_qtt={from_qtt}&until={until_qtt}&show={show}"
+    URL: str = os.getenv("BASE_URL") + f"/member/poisson?server_id={server.id}&from_qtt={from_qtt}&until={until_qtt}&chart={chart}"
     resp: Response = get(URL)
     status: int = resp.status_code
 
@@ -44,7 +44,7 @@ async def get_prob_new_members(ctx: commands.Context, from_qtt: int, until_qtt: 
         await ctx.reply(f"❌ problem during a request to the API\nProblem Status ---> {status}\n\n {resp.json()["message"]}")
         return
     
-    if show != "show":
+    if chart != "chart":
         data: float = resp.json()["data"]
         await ctx.reply(str(SingleProbNewMembersView(prob = data, from_qtt = from_qtt, to_qtt = until_qtt)))
         return
@@ -80,8 +80,8 @@ async def get_prob_new_members(ctx: commands.Context, from_qtt: int, until_qtt: 
 async def error_get_prob_new_members(ctx: commands.Context, ERR: Exception):
 
     END_MSG: str = """\n
-The command has the format: wolf?get_prob_new_members from_qtt unti_qtt show, where from_qtt is the starting quantity,
-until_qtt is the quantity at the end, show will show a distribution graph if you write \'show\' at this place, but this
+The command has the format: wolf?get_prob_new_members from_qtt unti_qtt chart, where from_qtt is the starting quantity,
+until_qtt is the quantity at the end, chart will show a distribution graph if you write \'chart\' at this place, but this
 parameter can be ignored, not showing the figure by default, Both from_qtt and until_qtt must be integers."""
 
     if isinstance(ERR, commands.MissingRequiredArgument):

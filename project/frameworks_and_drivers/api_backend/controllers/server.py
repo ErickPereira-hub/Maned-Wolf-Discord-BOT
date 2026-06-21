@@ -4,9 +4,10 @@ from project.frameworks_and_drivers.api_backend.infra.http_request_body_args_sin
 from project.interface_adapters.presenters.new_server_presenter import NewServerPresenter
 from project.application.use_cases.new_server_use_case import NewServerUseCase
 from project.frameworks_and_drivers.databases.mysql_db.dml.transactions.new_server_in_transaction import NewServerInTransaction
-from flask import Response
+from flask import Response, request
+from project.frameworks_and_drivers.databases.mysql_db.dml.dml_server import ServerDML
 
-class NewServerIn(Resource):
+class Server(Resource):
     
     def post(self) -> Response:
         self.__args: Dict[str, Any] = HTTP_BODY_ARGS.args_new_server.parse_args()
@@ -22,3 +23,14 @@ class NewServerIn(Resource):
         #Must run if everything went well
         self.__GOOD_JSON_RESPONSE: Dict[str, str] = {"message": "Ok"}
         return self.__GOOD_JSON_RESPONSE, 201
+    
+    def delete(self) -> Response:
+        self.__sid: int = request.args.get("server_id", type = int)
+
+        if self.__sid is None:
+            abort(400, message = "The server_id must be given")
+
+        #Deleting the data from the database
+        ServerDML().del_in_db(self.__sid)
+
+        return "", 200

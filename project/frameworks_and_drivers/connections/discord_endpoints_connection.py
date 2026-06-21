@@ -11,6 +11,7 @@ from project.frameworks_and_drivers.discord_bot.controller.events_controller.upd
 from project.frameworks_and_drivers.discord_bot.controller.events_controller.rm_member_event import on_member_remove
 from project.frameworks_and_drivers.discord_bot.controller.events_controller.rm_channel_event import on_guild_channel_delete
 from project.frameworks_and_drivers.discord_bot.controller.events_controller.update_channel_event import on_guild_channel_update
+from project.frameworks_and_drivers.discord_bot.controller.events_controller.rm_server_event import on_guild_remove
 
 #Commands
 from project.frameworks_and_drivers.discord_bot.controller.commands_controller.get_report_members import get_report_members

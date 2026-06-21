@@ -11,7 +11,7 @@ from project.frameworks_and_drivers.discord_bot.view.graphs.channels import Chan
 from project.application.utils.max_str_size import get_max_str_size
 
 @MW_BOT.bot.command()
-async def get_top_active_channels(ctx: commands.Context, show: str = "no"):
+async def get_top_active_channels(ctx: commands.Context, chart: str = "no"):
 
     #Checking if discord can catch the server
     server: Guild = ctx.guild
@@ -37,7 +37,7 @@ async def get_top_active_channels(ctx: commands.Context, show: str = "no"):
     
     data: List[Dict[str, int]] = resp.json()["data"]
 
-    if show != "show":
+    if chart != "chart":
         view: str = GetTopActiveChannelsView(data)
         await ctx.reply(view)
         return

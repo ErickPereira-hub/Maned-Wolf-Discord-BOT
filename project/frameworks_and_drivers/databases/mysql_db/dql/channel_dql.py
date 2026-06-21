@@ -85,7 +85,6 @@ class ChannelDQL:
             with MySQLCursor(scnx) as cursor:
                 cursor.execute(self.__SQL_NSFW, (server_id,))
                 self.__d_nsfw = cursor.fetchall()
-
         
         #Filling the "yes" or "no" option that is lacking in the query
         if "no" not in [data[0] for data in self.__d_nsfw]:

@@ -91,6 +91,7 @@ class AutomateMySQLDatabaseCreation:
         ) as scnx:
             with MySQLCursor(scnx) as cursor:
                 cursor.execute("DROP PROCEDURE IF EXISTS del_channel_transaction")
+                cursor.execute("DROP PROCEDURE IF EXISTS del_server_transaction")
                 cursor.execute(
                     """
     CREATE PROCEDURE del_channel_transaction(IN _channel_id BIGINT)
@@ -103,6 +104,28 @@ class AutomateMySQLDatabaseCreation:
             START TRANSACTION;
             DELETE FROM messages WHERE channel_id = _channel_id;
             DELETE FROM channels WHERE channel_id = _channel_id;
+            IF err_flag = 1 THEN
+                ROLLBACK;
+            ELSE
+                COMMIT;
+            END IF;
+        END
+                    """
+                )
+                cursor.execute(
+                    """
+    CREATE PROCEDURE del_server_transaction(IN _server_id BIGINT)
+        BEGIN
+            DECLARE err_flag TINYINT DEFAULT 0;
+            DECLARE CONTINUE HANDLER FOR SQLEXCEPTION
+                BEGIN
+                    SET err_flag = 1;
+                END;
+            START TRANSACTION;
+            DELETE FROM messages WHERE server_id = _server_id;
+            DELETE FROM members WHERE server_id = _server_id;
+            DELETE FROM channels WHERE server_id = _server_id;
+            DELETE FROM servers WHERE server_id = _server_id;
             IF err_flag = 1 THEN
                 ROLLBACK;
             ELSE
