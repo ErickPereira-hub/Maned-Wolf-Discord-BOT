@@ -30,7 +30,7 @@ async def get_prob_new_members(ctx: commands.Context, from_qtt: int, until_qtt: 
     await ctx.reply(PREP_MSG)
     
     #Calling the data throughout the API
-    URL: str = os.getenv("BASE_URL") + f"/member_poisson?server_id={server.id}&from_qtt={from_qtt}&until={until_qtt}&show={show}"
+    URL: str = os.getenv("BASE_URL") + f"/member/poisson?server_id={server.id}&from_qtt={from_qtt}&until={until_qtt}&show={show}"
     resp: Response = get(URL)
     status: int = resp.status_code
 

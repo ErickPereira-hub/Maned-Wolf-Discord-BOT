@@ -7,7 +7,7 @@ from time import time
 import os
 
 @MW_BOT.bot.command()
-async def get_channel_metrics(ctx: commands.Context):
+async def get_nsfw_qtt(ctx: commands.Context):
 
     server: Guild | None = ctx.guild
 
@@ -23,7 +23,7 @@ async def get_channel_metrics(ctx: commands.Context):
     await ctx.reply(PREP_MSG)
 
     #Calling the data throughout the API
-    URL: str = os.getenv("BASE_URL") + f"/channel_metrics?server_id={server_id}"
+    URL: str = os.getenv("BASE_URL") + f"/channel/analysis?server_id={server_id}&style=nsfw"
     resp: Response = get(URL)
     status: int = resp.status_code
 
@@ -33,21 +33,15 @@ async def get_channel_metrics(ctx: commands.Context):
     
     #Catching the data
     data: Dict[str, Dict[str, int]] = resp.json()["data"]
-    txt_ch_qtt: int = data["categories_metrics"]["Text channels"]
-    voice_ch_qtt: int = data["categories_metrics"]["Voice channels"]
-    nsfw_yes_ch_qtt: int = data["is_nsfw_metrics"]["yes"]
-    nsfw_no_ch_qtt: int = data["is_nsfw_metrics"]["no"]
-    tot_qtt: int = txt_ch_qtt + voice_ch_qtt
+    nsfw_yes_ch_qtt: int = data["yes"]
+    nsfw_no_ch_qtt: int = data["no"]
+    tot_qtt: int = nsfw_yes_ch_qtt + nsfw_no_ch_qtt
 
     t_end: float = time()
     t_interval: int = t_end - t_start
 
     MSG: str = f"""
-    🔗 Category information:
-    Quantity of channels (text and voice channels): {tot_qtt}\n
-    Quantity of voice channels: {voice_ch_qtt} ( {(100 * voice_ch_qtt / tot_qtt):.2f} % )
-    Quantity of text channels: {txt_ch_qtt} ( {(100 * txt_ch_qtt / tot_qtt):.2f} % )\n
-    NSFW information:
+    🔗 NSFW information:
     Quantity of NSFW channels: {nsfw_yes_ch_qtt} ( {(100 * nsfw_yes_ch_qtt / tot_qtt):.2f} % )
     Quantity of non NSFW channels: {nsfw_no_ch_qtt} ( {(100 * nsfw_no_ch_qtt / tot_qtt):.2f} % )\n
     Backend Latency: {(1000 * t_interval):.0f} sec

@@ -15,9 +15,9 @@ routes: Dict[Resource, str] = {
     Msg : "/msg",
     Member : "/member",
     Channel: "/channel",
-    MemberAnaysis : "/member_analysis",
-    MemberPredict : "/member_predict",
-    MemberPoisson : "/member_poisson",
-    TopActiveCh : "/top_active_ch",
-    ChannelMetrics : "/channel_metrics"
+    MemberAnaysis : "/member/analysis",
+    MemberPredict : "/member/predict",
+    MemberPoisson : "/member/poisson",
+    TopActiveCh : "/channel/top_active",
+    ChannelMetrics : "/channel/analysis"
 }

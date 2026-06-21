@@ -31,7 +31,7 @@ async def get_report_members(ctx: commands.Context, format: str, last_days: int 
         return
 
     #Calling the data throughout the API
-    URL: str = os.getenv("BASE_URL") + f"/member_analysis?server_id={server.id}"
+    URL: str = os.getenv("BASE_URL") + f"/member/analysis?server_id={server.id}"
     resp: Response = get(URL)
     
     #Sending a response when the request is unsuccessful

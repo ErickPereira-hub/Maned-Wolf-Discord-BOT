@@ -29,7 +29,7 @@ async def predict_members_qtt(ctx: commands.Context,
     await ctx.reply(FIRST_MSG)
 
     #Requesting the data to the API
-    URL: str = os.getenv("BASE_URL") + f"/member_predict?server_id={server.id}&day={day}"
+    URL: str = os.getenv("BASE_URL") + f"/member/predict?server_id={server.id}&day={day}"
     resp: Response = get(URL)
     status: int = resp.status_code
 

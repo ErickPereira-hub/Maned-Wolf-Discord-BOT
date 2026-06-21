@@ -26,7 +26,7 @@ async def get_top_active_channels(ctx: commands.Context, show: str = "no"):
     await ctx.reply(MSG_PREP)
 
     #Sending a request of data to the API
-    URL: str = os.getenv("BASE_URL") + f"/top_active_ch?server_id={server.id}"
+    URL: str = os.getenv("BASE_URL") + f"/channel/top_active?server_id={server.id}"
     resp: Response = get(URL)
     status: int = resp.status_code
 
