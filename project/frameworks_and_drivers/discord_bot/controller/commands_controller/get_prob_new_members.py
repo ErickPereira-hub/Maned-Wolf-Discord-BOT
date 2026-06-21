@@ -69,7 +69,7 @@ async def get_prob_new_members(ctx: commands.Context, from_qtt: int, until_qtt: 
     emb, file = get_emb_without_author(
         title = "Probability distribution for the quantity of members tomorrow",
         desc = f"Probability of gaining {f"{from_qtt} to {until_qtt}" if from_qtt < until_qtt else from_qtt} members tomorrow: {(100 * prob):.3f} %",
-        footer_txt = f"Backend Latency: {(100 * t_interval):.2f} ms",
+        footer_txt = f"Backend Latency: {(1000 * t_interval):.2f} ms",
         img_path = IMG_PATH
     )
 

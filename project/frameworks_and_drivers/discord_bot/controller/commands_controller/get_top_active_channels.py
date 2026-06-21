@@ -64,7 +64,7 @@ async def get_top_active_channels(ctx: commands.Context, show: str = "no"):
     emb, file = get_emb_without_author(
         title = "Volumes of messages for the most active channels",
         desc = f"",
-        footer_txt = f"Backend Latency: {(100 * t_interval):.2f} ms",
+        footer_txt = f"Backend Latency: {(1000 * t_interval):.2f} ms",
         img_path = IMG_PATH
     )
 

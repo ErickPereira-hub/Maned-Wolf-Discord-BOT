@@ -8,6 +8,7 @@ from project.frameworks_and_drivers.api_backend.controllers.member_analysis impo
 from project.frameworks_and_drivers.api_backend.controllers.member_predict import MemberPredict
 from project.frameworks_and_drivers.api_backend.controllers.member_poisson import MemberPoisson
 from project.frameworks_and_drivers.api_backend.controllers.top_active_ch import TopActiveCh
+from project.frameworks_and_drivers.api_backend.controllers.channel_metrics import ChannelMetrics
 
 routes: Dict[Resource, str] = {
     NewServerIn : "/new-server",
@@ -17,5 +18,6 @@ routes: Dict[Resource, str] = {
     MemberAnaysis : "/member_analysis",
     MemberPredict : "/member_predict",
     MemberPoisson : "/member_poisson",
-    TopActiveCh : "/top_active_ch"
+    TopActiveCh : "/top_active_ch",
+    ChannelMetrics : "/channel_metrics"
 }

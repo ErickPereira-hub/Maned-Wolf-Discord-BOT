@@ -70,7 +70,7 @@ async def get_report_members(ctx: commands.Context, format: str, last_days: int 
         emb, file = get_emb_without_author(
             title = "🔗 Graphical information about the quantity of members",
             desc = view.get_desc(into_embed = True),
-            footer_txt = f"Backend latency: {t_interval:.4f} sec",
+            footer_txt = f"Backend latency: {(1000 * t_interval):.0f} ms",
             img_path = f"{MembersGraph.REPO_PATH}/members_{server.id}{author.id}.png"
         )
         
