@@ -3,6 +3,7 @@ from flask import Response, request
 from project.frameworks_and_drivers.databases.mysql_db.dql.member_dql import MemberDQL
 from typing import Tuple, Dict, List
 from project.application.poisson_member import PoissonMember
+from project.frameworks_and_drivers.api_backend.middlewares.rate_blocker import rate_blocker
 
 class MemberPoisson(Resource):
 
@@ -12,6 +13,7 @@ class MemberPoisson(Resource):
         self.__MEMBER_DQL: MemberDQL = MemberDQL()
 
     def get(self) -> Response:
+        rate_blocker() #<--- Rate blocker
 
         #Grabbing the URL data
         self.__server_id: int | None = request.args.get("server_id", type = int)

@@ -2,10 +2,13 @@ from flask_restful import abort, Resource
 from typing import Dict
 from project.frameworks_and_drivers.databases.mysql_db.dql.channel_dql import ChannelDQL
 from flask import request, Response
+from project.frameworks_and_drivers.api_backend.middlewares.rate_blocker import rate_blocker
 
 class ChannelAnalysis(Resource):
 
     def get(self) -> Response:
+        
+        rate_blocker() #<--- Rate blocker
 
         #Getting the id of the server and the requested style
         self.__sid: int | None = request.args.get("server_id", type = int)

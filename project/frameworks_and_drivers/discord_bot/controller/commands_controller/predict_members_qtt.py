@@ -1,6 +1,6 @@
 from project.frameworks_and_drivers.discord_bot.infra.singletons import MW_BOT
 from discord.ext import commands
-from discord import Guild
+from discord import Guild, Member
 from typing import Dict, Any
 from requests import Response, get
 from time import time
@@ -19,7 +19,8 @@ async def predict_members_qtt(ctx: commands.Context,
         return
 
     server: Guild = ctx.guild #<--- Server where the request was done
-    if server is None: #<--- Discord isn't allowing the access to the server
+    author: Member = ctx.author
+    if server is None or author is None: #<--- Discord isn't allowing the access to the server
         BAD_MSG_DUE_TO_DISC: str = "❌ Access not allowed due to discord permissions!"
         await ctx.reply(BAD_MSG_DUE_TO_DISC)
         return
@@ -29,13 +30,17 @@ async def predict_members_qtt(ctx: commands.Context,
     await ctx.reply(FIRST_MSG)
 
     #Requesting the data to the API
-    URL: str = os.getenv("BASE_URL") + f"/member/predict?server_id={server.id}&day={day}"
+    URL: str = os.getenv("BASE_URL") + f"/member/predict?server_id={server.id}&day={day}&member_id={author.id}"
     resp: Response = get(URL)
     status: int = resp.status_code
 
     #If we get into trouble with the API:
     if status != 200:
         
+        if status == 429:
+            await ctx.reply(f"❌ Too many requests. Hold on, please!")
+            return
+
         if status == 403:
             await ctx.reply("⚠️ You must have at least 10 days of data concerning the members before doing time predictions")
             return

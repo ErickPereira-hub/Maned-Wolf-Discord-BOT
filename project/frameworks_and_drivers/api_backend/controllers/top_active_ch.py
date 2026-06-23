@@ -4,10 +4,13 @@ from project.interface_adapters.presenters.new_server_presenter import NewServer
 from project.application.use_cases.new_server_use_case import NewServerUseCase
 from project.frameworks_and_drivers.databases.mysql_db.dql.channel_dql import ChannelDQL
 from flask import Response, request
+from project.frameworks_and_drivers.api_backend.middlewares.rate_blocker import rate_blocker
 
 class TopActiveCh(Resource):
 
     def get(self) -> Response:
+
+        rate_blocker() #<--- Rate blocker
 
         #Getting and checking the server_id
         self.__server_id: int | None = request.args.get("server_id", type = int)

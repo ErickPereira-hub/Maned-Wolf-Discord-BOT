@@ -3,6 +3,7 @@ from typing import Dict, Tuple
 from project.frameworks_and_drivers.databases.mysql_db.dql.member_dql import MemberDQL
 from flask import request, Response
 from project.frameworks_and_drivers.api_backend.middlewares.acumulative_freq_middleware import add_acum_freq_middleware
+from project.frameworks_and_drivers.api_backend.middlewares.rate_blocker import rate_blocker
 
 class MemberAnaysis(Resource):
 
@@ -11,6 +12,9 @@ class MemberAnaysis(Resource):
         self.__MEMBER_DQL_SINGLETON: MemberDQL = MemberDQL()
 
     def get(self) -> Response:
+
+        rate_blocker() #<--- Rate blocker
+        
         self.__server_id: int | None = request.args.get("server_id", type = int)
 
         #Checking the server_id

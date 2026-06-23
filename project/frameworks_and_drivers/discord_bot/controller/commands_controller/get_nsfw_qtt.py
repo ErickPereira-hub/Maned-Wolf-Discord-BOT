@@ -26,11 +26,16 @@ async def get_nsfw_qtt(ctx: commands.Context, chart = "no"):
     await ctx.reply(PREP_MSG)
 
     #Calling the data throughout the API
-    URL: str = os.getenv("BASE_URL") + f"/channel/analysis?server_id={server_id}&style=nsfw"
+    URL: str = os.getenv("BASE_URL") + f"/channel/analysis?server_id={server_id}&style=nsfw&member_id={author.id}"
     resp: Response = get(URL)
     status: int = resp.status_code
 
     if status != 200:
+
+        if status == 429:
+            await ctx.reply(f"❌ Too many requests. Hold on, please!")
+            return
+
         await ctx.reply(f"❌ problem during a request to the API\nStatus code: {status}")
         return
     

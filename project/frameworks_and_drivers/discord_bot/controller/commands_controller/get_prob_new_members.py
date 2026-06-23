@@ -30,13 +30,17 @@ async def get_prob_new_members(ctx: commands.Context, from_qtt: int, until_qtt: 
     await ctx.reply(PREP_MSG)
     
     #Calling the data throughout the API
-    URL: str = os.getenv("BASE_URL") + f"/member/poisson?server_id={server.id}&from_qtt={from_qtt}&until={until_qtt}&chart={chart}"
+    URL: str = os.getenv("BASE_URL") + f"/member/poisson?server_id={server.id}&from_qtt={from_qtt}&until={until_qtt}&chart={chart}&member_id={author.id}"
     resp: Response = get(URL)
     status: int = resp.status_code
 
     #If we get into trouble with the API:
     if status != 200:
         
+        if status == 429:
+            await ctx.reply(f"❌ Too many requests. Hold on, please!")
+            return
+
         if status == 403:
             await ctx.reply(f"⚠️ {resp.json()["message"]}")
             return

@@ -26,12 +26,17 @@ async def get_top_active_channels(ctx: commands.Context, chart: str = "no"):
     await ctx.reply(MSG_PREP)
 
     #Sending a request of data to the API
-    URL: str = os.getenv("BASE_URL") + f"/channel/top_active?server_id={server.id}"
+    URL: str = os.getenv("BASE_URL") + f"/channel/top_active?server_id={server.id}&member_id={author.id}"
     resp: Response = get(URL)
     status: int = resp.status_code
 
     #Problem during the request must exit the endpoint
     if status != 200:
+
+        if status == 429:
+            await ctx.reply(f"❌ Too many requests. Hold on, please!")
+            return
+
         await ctx.reply(f"❌ problem during a request to the API\nStatus: {status}")
         return
     
