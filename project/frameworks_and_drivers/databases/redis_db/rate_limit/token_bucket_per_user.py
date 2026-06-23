@@ -28,7 +28,6 @@ class TokenBucketPerUser(RateLimitWorld):
             self.__create_bucket()
 
         self.__tokens_qtt: int = int(rcnx.get(self.__key).decode()) #<--- Quantity of tokens of the user
-        print("Token qtt :: ", self.__tokens_qtt)
         
         #checking if we have tokens inside the api to allow or block access
         if self.__tokens_qtt > 0:
@@ -41,37 +40,42 @@ class TokenBucketPerUser(RateLimitWorld):
     def feed_buckets_in_parallel(cls, interval: float | int = 1) -> None:
         
         while True:
-            t_start: float = time()
+            t_start: float = time() #<--- Starting time of the loop
+
+            #Important variables for aggregation
             sum_of_ttls: float | int = 0
             sum_of_tokens: int = 0
             zero_tokens_qtt: int = 0
-            #Getting all keys
+
+            #Getting all keys related to a token bucket
             keys: List[bytes] = rcnx.keys("TB_*")
 
-            keys_str: List[str] = [key.decode() for key in keys]
-            size: int = len(keys_str)
-            #Feeding ou buckets
+            keys_str: List[str] = [key.decode() for key in keys]#<--- same list as before, but with strings instead of bytes
+            
+            size: int = len(keys_str)#<--- Number of buckets and number of active users of the API
+            
+            #Feeding our buckets
             for key in keys_str:
                 
                 #Getting the quantity of tokens of the bucket and the ttl
                 token_qtt: int = int(rcnx.get(key).decode())
-                ttl: int = rcnx.ttl(key)
-                sum_of_ttls += ttl
-                sum_of_tokens += token_qtt
+                ttl: int = rcnx.ttl(key) #<--- TTL of the bucket in seconds
+                
+                sum_of_ttls += ttl #Incrementing the TTL sum
+                sum_of_tokens += token_qtt #Incrementing the token
 
                 if token_qtt == 0:
-                    zero_tokens_qtt += 1
+                    zero_tokens_qtt += 1 #429 activated for one user
 
                 #Feeding the bucket with new tokens when needed
                 if token_qtt + cls.FREQ <= cls.CAP:
                     rcnx.incr(key, cls.FREQ)
                 else:
                     rcnx.set(key, cls.CAP)
-                    rcnx.expire(key, ttl) #Keeping the expire time to the key
+                    rcnx.expire(key, ttl) #Keeping the same expire time to the key
 
-            #Correcting the delay when there is too many users
-            t_end: float = time()
-            t_int: float = t_end - t_start
+            t_end: float = time() #<--- End time
+            t_int: float = t_end - t_start #<--- Interval of time taken to do CRUD in Redis
 
             BACKLOG_MSG: str = f"""
             {'='*50}
@@ -88,4 +92,5 @@ class TokenBucketPerUser(RateLimitWorld):
             """ if size != 0 else "Theres no active user"
             print(BACKLOG_MSG)
 
-            sleep(interval - t_int if t_int < interval else 0) #<--- Waiting for 'interval' seconds before the repetition of the operation
+            #Correcting the delay when there is too many users
+            sleep(interval - t_int if t_int < interval else 0)

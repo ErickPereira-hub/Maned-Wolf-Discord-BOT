@@ -5,6 +5,7 @@ from typing import Tuple, Dict, List, Any
 from project.frameworks_and_drivers.api_backend.middlewares.acumulative_freq_middleware import add_acum_freq_middleware
 from project.application.use_cases.predict_poly_reg_use_case import predict_poly_reg_use_case
 from project.frameworks_and_drivers.api_backend.middlewares.rate_blocker import rate_blocker
+from project.frameworks_and_drivers.databases.redis_db.cache_aside.ca_for_member_predict import CacheAsideMemberPredict
 
 class MemberPredict(Resource):
 
@@ -21,9 +22,18 @@ class MemberPredict(Resource):
             abort(400, message = "The maximum for 'day' is 3 and it must be an integer")
         if self.__sid is None:
             abort(400, message = "server id must be present")
+        
+        #Attribute that will be our initial dataset
+        self.__dataset: Dict[str, Tuple[int, int, int]] | None = None
 
-        #Querying the database
-        self.__dataset: Dict[str, Tuple[int, int, int]] = MemberDQL().get_members_qtt(server_id = self.__sid)
+        #Querying the databases with cache-aside
+        self.__cache_obj: CacheAsideMemberPredict = CacheAsideMemberPredict(server_id = self.__sid)
+        if self.__cache_obj.exists_in_cache():
+            self.__dataset = self.__cache_obj.fetch_cache()
+        else:
+            self.__dataset = MemberDQL().get_members_qtt(server_id = self.__sid)
+            self.__cache_obj.insert_into_cache(JSON = self.__dataset)
+        
         self.__dataset_completed: Dict[str, float | Dict[str, Tuple[int, int, int, int]]] = add_acum_freq_middleware(self.__dataset)
 
         #Checking the number of days
