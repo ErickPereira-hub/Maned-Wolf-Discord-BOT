@@ -8,7 +8,6 @@ class Polynomial:
 
     def __str__(self) -> str:
         self.__rep: str = "p(x) = "
-        print(self.__coeffs)
         for ind, coeff in enumerate(self.__coeffs):
             if ind == 0:
                 self.__rep += f"{coeff:.4f}"

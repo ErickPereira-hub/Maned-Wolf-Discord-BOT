@@ -15,7 +15,7 @@ def scrap_poly(poly: str) -> List[float]:
     scrapping_coeffs = [float(data) for data in scrapping_coeffs] #<--- Extracted coefficients from the backend (deg 0 to deg 5 ->)
     return scrapping_coeffs
 
-def test_poly_reg_endpoint(mocker) -> None:
+def test_poly_reg() -> None:
 
     mocked_dataset: List[Tuple[int, float]] = [
         (1, 256),
