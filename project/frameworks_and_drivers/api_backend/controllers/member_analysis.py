@@ -31,7 +31,7 @@ class MemberAnaysis(Resource):
         else:
             self.__data = self.__MEMBER_DQL_SINGLETON.get_members_qtt(server_id = self.__server_id)
             self.__cache_obj.insert_into_cache(JSON = self.__data)
-
+        print(self.__data)
         #Grabbing the quantities of members for each day
         self.__complete_data: Dict[str, Tuple[int, int, int, int]] = add_acum_freq_middleware(self.__data)
         
