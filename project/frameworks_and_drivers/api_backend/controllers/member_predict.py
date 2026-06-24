@@ -6,6 +6,7 @@ from project.frameworks_and_drivers.api_backend.middlewares.acumulative_freq_mid
 from project.application.use_cases.predict_poly_reg_use_case import predict_poly_reg_use_case
 from project.frameworks_and_drivers.api_backend.middlewares.rate_blocker import rate_blocker
 from project.frameworks_and_drivers.databases.redis_db.cache_aside.ca_for_member_predict import CacheAsideMemberPredict
+from pprint import pprint
 
 class MemberPredict(Resource):
 
@@ -33,12 +34,11 @@ class MemberPredict(Resource):
         else:
             self.__dataset = MemberDQL().get_members_qtt(server_id = self.__sid)
             self.__cache_obj.insert_into_cache(JSON = self.__dataset)
-        
-        self.__dataset_completed: Dict[str, float | Dict[str, Tuple[int, int, int, int]]] = add_acum_freq_middleware(self.__dataset)
 
+        self.__dataset_completed: Dict[str, float | Dict[str, Tuple[int, int, int, int]]] = add_acum_freq_middleware(self.__dataset)
         #Checking the number of days
         if len(self.__dataset) < 10:
-            abort(403, message = "Number of days is too slow!") #<--- Forbidden Access if the number of days is small because we need a large dataset as the base of the prediction.
+            abort(403, message = "Number of days is too low!") #<--- Forbidden Access if the number of days is small because we need a large dataset as the base of the prediction.
         
         #Filtering the data
         self.__qtt_arr: List[int] = [data[3] for data in self.__dataset_completed["data"].values()]
