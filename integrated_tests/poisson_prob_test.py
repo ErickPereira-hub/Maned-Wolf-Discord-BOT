@@ -4,12 +4,12 @@ from typing import List
 def test_poisson() -> None:
 
     #Mocked data
-    # #number of new members for the last 11 days
+    #number of new members for the last 11 days
     mocked_dataset: List[int | float] = [1, 2, 2, 3, 1, 2, 3, 4, 5, 4, 3]
     mocked_from: int | float = [1, 2, 4]
     mocked_until: int | float = [5, 10, 4]
 
-    probability: List[float] = list()
+    probability: List[float] = list() #<--- Least of Poisson's probabilities
 
     for vmocked_from, vmocked_until in zip(mocked_from, mocked_until):
         probability.append(PoissonMember().get_poisson_in_range(

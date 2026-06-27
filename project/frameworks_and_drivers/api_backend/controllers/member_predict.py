@@ -14,6 +14,8 @@ class MemberPredict(Resource):
 
         rate_blocker() #<--- Rate blocker
 
+        self.__response_json: Dict[str, Any] | None = None #<--- Future response
+
         #Grabbing the inputs
         self.__sid: int = request.args.get("server_id", type = int)
         self.__day: int = request.args.get("day", type = int)
@@ -23,19 +25,18 @@ class MemberPredict(Resource):
             abort(400, message = "The maximum for 'day' is 3 and it must be an integer")
         if self.__sid is None:
             abort(400, message = "server id must be present")
-        
-        #Attribute that will be our initial dataset
-        self.__dataset: Dict[str, Tuple[int, int, int]] | None = None
 
-        #Querying the databases with cache-aside
         self.__cache_obj: CacheAsideMemberPredict = CacheAsideMemberPredict(server_id = self.__sid)
-        if self.__cache_obj.exists_in_cache():
-            self.__dataset = self.__cache_obj.fetch_cache()
-        else:
-            self.__dataset = MemberDQL().get_members_qtt(server_id = self.__sid)
-            self.__cache_obj.insert_into_cache(JSON = self.__dataset)
 
+        #If the data is in cache
+        if self.__cache_obj.exists_in_cache():
+            self.__response_json = self.__cache_obj.fetch_cache()
+            return self.__response_json, 200 #<--- The process ends here when we have the data in cache
+
+        #This piece of the endpoint will be reached if the data isn't inside the RAM
+        self.__dataset: Dict[str, Tuple[int, int, int]] = MemberDQL().get_members_qtt(server_id = self.__sid)
         self.__dataset_completed: Dict[str, float | Dict[str, Tuple[int, int, int, int]]] = add_acum_freq_middleware(self.__dataset)
+
         #Checking the number of days
         if len(self.__dataset) < 10:
             abort(403, message = "Number of days is too low!") #<--- Forbidden Access if the number of days is small because we need a large dataset as the base of the prediction.
@@ -45,7 +46,7 @@ class MemberPredict(Resource):
         self.__qtt_pos: List[int] = [pos + 1 for pos in range(len(self.__qtt_arr))]
         self.__points: List[Tuple[int, int]] = list(zip(self.__qtt_pos, self.__qtt_arr))
 
-            #Doing the prediction
+        #Doing the prediction
         self.__resp_prediction: Dict[str, float | int] = predict_poly_reg_use_case(
             input = max(self.__qtt_pos) + self.__day,
             dataset = self.__points
@@ -56,10 +57,12 @@ class MemberPredict(Resource):
         self.__poly: str = str(self.__resp_prediction["polynomial"])
         self.__tot_predicted_qtt: int | float = self.__resp_prediction["predicted_output"]
 
-        #Sending the final response
-        self.__response_json: Dict[str, Any] = {
+        #Preparing the final response
+        self.__response_json = {
             "error": self.__ERR,
             "poly": self.__poly,
             "result": self.__tot_predicted_qtt
         }
+
+        self.__cache_obj.insert_into_cache(JSON = self.__response_json)#<--- Inserting the processed data in the cache for a range of time
         return self.__response_json, 200
