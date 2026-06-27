@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
-from typing import List, Tuple
+from typing import List, Tuple, Dict
 from project.frameworks_and_drivers.discord_bot.view.graphs.graph import Graph
+from project.application.utils.max_str_size import get_max_str_size
 
 class MembersGraph(Graph):
 
@@ -28,4 +29,15 @@ class MembersGraph(Graph):
         plt.xlabel("quantity of entrances")
         plt.ylabel("Probability (%)")
         plt.savefig(cls.REPO_PATH + f"/members_{server_id}{author_id}_poisson.png", dpi = 150)
+        plt.clf()
+
+    @classmethod
+    def build_top_members(cls, dataset: List[Dict[str, int]], server_id: int, author_id: int, option: str) -> None:
+        cls.define_dark_style()
+        plt.pie(
+            x = [list(data.values())[0] for data in dataset],
+            labels = [f"[ {list(data.values())[0]} ]  " + get_max_str_size(list(data.keys())[0]) for data in dataset],
+            colors = [cls.WEAK_COLOR, cls.STRONG_COLOR]
+        )
+        plt.savefig(cls.REPO_PATH + f"/best_members_by_{option}_{server_id}{author_id}.png")
         plt.clf()
