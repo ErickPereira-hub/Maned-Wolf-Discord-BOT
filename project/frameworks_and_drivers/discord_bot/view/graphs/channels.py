@@ -4,8 +4,6 @@ from project.frameworks_and_drivers.discord_bot.view.graphs.graph import Graph
 
 class ChannelsGraph(Graph):
 
-    REPO_PATH: str = "project/img_repo"
-
     @classmethod
     def build_top_ch_bars(cls, ch_names: List[str], msg_volume_per_channel: List[int], server_id: int, author_id: int) -> None:
         cls.define_dark_style()

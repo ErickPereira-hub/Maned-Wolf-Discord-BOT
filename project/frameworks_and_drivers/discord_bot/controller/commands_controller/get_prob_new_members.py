@@ -8,6 +8,7 @@ from project.frameworks_and_drivers.discord_bot.view.get_single_prob_new_members
 import os
 from project.frameworks_and_drivers.discord_bot.view.graphs.members import MembersGraph
 from project.frameworks_and_drivers.discord_bot.view.embed_middleware import get_emb_without_author
+from project.frameworks_and_drivers.databases.redis_db.cache_backlog.cache_backlog import CacheBacklog
 
 @MW_BOT.bot.command()
 async def get_prob_new_members(ctx: commands.Context, from_qtt: int, until_qtt: int, chart: str = "no"):
@@ -33,6 +34,7 @@ async def get_prob_new_members(ctx: commands.Context, from_qtt: int, until_qtt: 
     URL: str = os.getenv("BASE_URL") + f"/member/poisson?server_id={server.id}&from_qtt={from_qtt}&until={until_qtt}&chart={chart}&member_id={author.id}"
     resp: Response = get(URL)
     status: int = resp.status_code
+    CacheBacklog.update_backlog(status)#<---Updating the backlog in RAM
 
     #If we get into trouble with the API:
     if status != 200:
@@ -47,7 +49,7 @@ async def get_prob_new_members(ctx: commands.Context, from_qtt: int, until_qtt: 
 
         await ctx.reply(f"❌ problem during a request to the API\nProblem Status ---> {status}\n\n {resp.json()["message"]}")
         return
-    
+
     if chart != "chart":
         data: float = resp.json()["data"]
         await ctx.reply(str(SingleProbNewMembersView(prob = data, from_qtt = from_qtt, to_qtt = until_qtt)))
@@ -62,7 +64,8 @@ async def get_prob_new_members(ctx: commands.Context, from_qtt: int, until_qtt: 
         from_qtt = from_qtt,
         until_qtt = until_qtt,
         server_id = server.id,
-        author_id = author.id)
+        author_id = author.id,
+        style = "members")
     
     #Taking the time
     t_end: float = time()

@@ -6,6 +6,7 @@ from requests import Response, get
 from time import time
 import os
 from project.frameworks_and_drivers.discord_bot.view.predict_members_qtt_view import ViewPredictMembersQtt
+from project.frameworks_and_drivers.databases.redis_db.cache_backlog.cache_backlog import CacheBacklog
 
 @MW_BOT.bot.command()
 async def predict_members_qtt(ctx: commands.Context,
@@ -33,6 +34,7 @@ async def predict_members_qtt(ctx: commands.Context,
     URL: str = os.getenv("BASE_URL") + f"/member/predict?server_id={server.id}&day={day}&member_id={author.id}"
     resp: Response = get(URL)
     status: int = resp.status_code
+    CacheBacklog.update_backlog(status)#<---Updating the backlog in RAM
 
     #If we get into trouble with the API:
     if status != 200:
@@ -47,7 +49,7 @@ async def predict_members_qtt(ctx: commands.Context,
 
         await ctx.reply(f"❌ problem during a request to the API\nProblem Status ---> {status}\n\n {resp.json()["message"]}")
         return
-    
+
     #This piece of code will run if everything went fine (status as 200)
     data: Dict[str, Any] = resp.json()
     

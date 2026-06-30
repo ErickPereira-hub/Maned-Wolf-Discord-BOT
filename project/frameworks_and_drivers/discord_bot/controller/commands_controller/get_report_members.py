@@ -8,6 +8,7 @@ from project.frameworks_and_drivers.discord_bot.view.graphs.members import Membe
 from project.frameworks_and_drivers.discord_bot.view.members_qtt_view import MembersQttView
 from project.frameworks_and_drivers.discord_bot.view.embed_middleware import get_emb_without_author
 from time import time
+from project.frameworks_and_drivers.databases.redis_db.cache_backlog.cache_backlog import CacheBacklog
 
 @MW_BOT.bot.command()
 async def get_report_members(ctx: commands.Context, format: str, last_days: int = 7):
@@ -33,7 +34,8 @@ async def get_report_members(ctx: commands.Context, format: str, last_days: int 
     #Calling the data throughout the API
     URL: str = os.getenv("BASE_URL") + f"/member/analysis?server_id={server.id}&member_id={author.id}"
     resp: Response = get(URL)
-    
+    CacheBacklog.update_backlog(resp.status_code)#<---Updating the backlog in RAM
+
     #Sending a response when the request is unsuccessful
     if resp.status_code != 200:
 
@@ -43,7 +45,7 @@ async def get_report_members(ctx: commands.Context, format: str, last_days: int 
 
         await ctx.reply(f"Something went bad in the backend --> Status: {resp.status_code}")
         return
-    
+
     ds: Dict[str, Any] = resp.json()
 
     #Encapsulating the data in a beautiful interface and sending it as response

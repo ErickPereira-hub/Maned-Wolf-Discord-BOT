@@ -2,6 +2,7 @@ from project.frameworks_and_drivers.discord_bot.infra.singletons import MW_BOT
 import discord
 from requests import Response, delete
 import os
+from project.frameworks_and_drivers.databases.redis_db.cache_backlog.cache_backlog import CacheBacklog
 
 @MW_BOT.bot.event
 async def on_guild_remove(guild: discord.Guild):
@@ -18,6 +19,7 @@ async def on_guild_remove(guild: discord.Guild):
     #Doing a delete request
     URL: str = os.getenv("BASE_URL") + f"/server?server_id={server_id}"
     resp: Response = delete(URL) #<--- Requesting a deletion to the API
+    CacheBacklog.update_backlog(resp.status_code)#<---Updating the backlog in RAM
 
     #If something bad happens
     if resp.status_code != 200:

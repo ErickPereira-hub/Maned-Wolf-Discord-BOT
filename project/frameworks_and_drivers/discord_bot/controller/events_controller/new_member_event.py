@@ -3,6 +3,7 @@ from discord import Member
 from typing import Dict
 import os
 from requests import Response, post
+from project.frameworks_and_drivers.databases.redis_db.cache_backlog.cache_backlog import CacheBacklog
 
 @MW_BOT.bot.event
 async def on_member_join(member: Member):
@@ -19,6 +20,7 @@ async def on_member_join(member: Member):
     #Doing the request
     URL: str = os.getenv("BASE_URL") + "/member"
     resp: Response = post(URL, json = member_data)
+    CacheBacklog.update_backlog(resp.status_code)#<---Updating the backlog in RAM
 
     #If the operation wasn't done
     if resp.status_code != 201:

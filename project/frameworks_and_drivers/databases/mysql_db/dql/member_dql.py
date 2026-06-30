@@ -2,7 +2,6 @@ from project.frameworks_and_drivers.databases.mysql_db.infra.cnx.strong_cnx impo
 from project.frameworks_and_drivers.databases.mysql_db.infra.cursor import MySQLCursor
 from typing import Dict, Tuple, List
 import os
-from datetime import datetime
 
 class MemberDQL:
 
@@ -10,6 +9,7 @@ class MemberDQL:
         self.__member_qtt_per_day: Dict[str, Tuple[int, int, int]] = dict()
         self.__top_active_members_by_ch: List[Dict[str, int]] | None = None
         self.__top_active_members_by_server: List[Dict[str, int]] | None = None
+        self.__most_active_member_id: int | None = None
 
     def get_members_qtt(self, server_id: int) -> Dict[str, Tuple[int, int, int]]:
         #Query that catches the qtt of members for each day
@@ -74,7 +74,7 @@ class MemberDQL:
                     member_name
                 FROM
                     members
-                WHERE server_id = %s
+                WHERE server_id = %s AND deleted_at IS NULL
                 ) AS mb
                 INNER JOIN (
                     SELECT
@@ -168,7 +168,7 @@ class MemberDQL:
                     member_name
                 FROM
                     members
-                WHERE server_id = %s
+                WHERE server_id = %s AND deleted_at IS NULL
                 ) AS mb
                 INNER JOIN (
                     SELECT
@@ -177,9 +177,10 @@ class MemberDQL:
                     FROM
                         messages AS msg INNER JOIN members AS mb
                         ON mb.member_id_disc = msg.author_id
+                        INNER JOIN channels AS ch ON ch.channel_id = msg.channel_id
                     WHERE
                         msg.message_date BETWEEN %s AND NOW()
-                        AND msg.server_id = %s AND mb.deleted_at IS NULL
+                        AND ch.server_id = %s AND mb.deleted_at IS NULL
                     GROUP BY
                         msg.author_id
                         ) AS agg_msg_vol ON agg_msg_vol.id_author = mb.member_id_disc
@@ -198,3 +199,35 @@ class MemberDQL:
                 self.__top_active_members_by_server = [{data[0] : data[1]} for data in cursor.fetchall()]
         
         return self.__top_active_members_by_server
+    
+    def get_most_active_member_from_db(self, server_id: int, from_date: str) -> int:
+
+        #Getting the most active member inside the server for text channels
+        SQL: str = """
+            SELECT
+                msg.author_id
+            FROM
+                messages AS msg INNER JOIN members AS mb
+                ON msg.author_id = mb.member_id_disc
+                INNER JOIN channels AS ch ON ch.channel_id = msg.channel_id
+            WHERE
+                mb.deleted_at IS NULL AND msg.message_date BETWEEN %s AND NOW() AND ch.server_id = %s
+            GROUP BY
+                msg.author_id
+            ORDER BY
+                COUNT(*) DESC
+            LIMIT
+                1
+        """
+
+        #Getting the aggregated data from MySQL
+        with StrongCnx(
+            mysql_username = os.getenv("MYSQL_USERNAME"),
+            mysql_password = os.getenv("MYSQL_PASSWORD"),
+           db_name = os.getenv("MYSQL_DB_NAME")
+        ) as scnx:
+            with MySQLCursor(scnx) as cursor:
+                cursor.execute(SQL, (from_date, server_id))
+                self.__most_active_member_id = cursor.fetchall()[0][0]
+
+        return self.__most_active_member_id

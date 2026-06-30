@@ -2,7 +2,7 @@ from flask_restful import Resource, abort
 from flask import Response, request
 from project.frameworks_and_drivers.databases.mysql_db.dql.member_dql import MemberDQL
 from typing import Tuple, Dict, List
-from project.application.poisson_member import PoissonMember
+from project.application.poisson_member_or_msg import PoissonMemberOrMessage
 from project.frameworks_and_drivers.api_backend.middlewares.rate_blocker import rate_blocker
 
 class MemberPoisson(Resource):
@@ -13,6 +13,7 @@ class MemberPoisson(Resource):
         self.__MEMBER_DQL: MemberDQL = MemberDQL()
 
     def get(self) -> Response:
+        
         rate_blocker() #<--- Rate blocker
 
         #Grabbing the URL data
@@ -37,7 +38,7 @@ class MemberPoisson(Resource):
         if len(self.__incrs) < 7:
             abort(403, message = "You must have at least one weak of member data before doing this operation")
         
-        pm: PoissonMember = PoissonMember()
+        pm: PoissonMemberOrMessage = PoissonMemberOrMessage()
 
         self.__prob: float = pm.get_poisson_in_range(
             from_qtt = self.__from_qtt,
@@ -53,17 +54,8 @@ class MemberPoisson(Resource):
             }
         
             return self.__resp, 200
-        
-        self.__dist_limit: int = self.__DIST_SIZE if self.__DIST_SIZE > self.__until else self.__until + 5
 
-        #If the requester wants to see the data
-        self.__region: range = range(0, self.__dist_limit + 1)
-
-        self.__dist_discrete_points: List[Tuple[int, float]] = list(zip(
-            [pos for pos in self.__region],
-            [
-                pm.get_poisson_single_prob(input_qtt = pos, incrs = self.__incrs) for pos in self.__region
-            ]))
+        self.__dist_discrete_points: List[Dict[int, float]] = pm.get_discrete_points(incrs = self.__incrs, until = self.__until, dist_size = self.__DIST_SIZE)
         self.__resp: Dict[str, str | List[Tuple[int, float]]] = {
             "message" : "ok",
             "data" : self.__dist_discrete_points,

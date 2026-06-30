@@ -10,6 +10,8 @@ from project.frameworks_and_drivers.api_backend.controllers.member_poisson impor
 from project.frameworks_and_drivers.api_backend.controllers.top_active_ch import TopActiveCh
 from project.frameworks_and_drivers.api_backend.controllers.channel_analysis import ChannelAnalysis
 from project.frameworks_and_drivers.api_backend.controllers.top_members import TopMembers
+from project.frameworks_and_drivers.api_backend.controllers.most_active_member import MostActiveMember
+from project.frameworks_and_drivers.api_backend.controllers.message_poisson import MessagePoisson
 
 routes: Dict[Resource, str] = {
     Server : "/server",
@@ -21,5 +23,7 @@ routes: Dict[Resource, str] = {
     MemberPoisson : "/member/poisson",
     TopActiveCh : "/channel/top_active",
     ChannelAnalysis : "/channel/analysis",
-    TopMembers : "/member/top_members"
+    TopMembers : "/member/top_members",
+    MostActiveMember: "/member/most_active_member",
+    MessagePoisson: "/msg/poisson"
 }

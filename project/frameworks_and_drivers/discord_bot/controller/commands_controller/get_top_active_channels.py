@@ -9,6 +9,7 @@ import os
 from project.frameworks_and_drivers.discord_bot.view.embed_middleware import get_emb_without_author
 from project.frameworks_and_drivers.discord_bot.view.graphs.channels import ChannelsGraph
 from project.application.utils.max_str_size import get_max_str_size
+from project.frameworks_and_drivers.databases.redis_db.cache_backlog.cache_backlog import CacheBacklog
 
 @MW_BOT.bot.command()
 async def get_top_active_channels(ctx: commands.Context, chart: str = "no"):
@@ -29,6 +30,7 @@ async def get_top_active_channels(ctx: commands.Context, chart: str = "no"):
     URL: str = os.getenv("BASE_URL") + f"/channel/top_active?server_id={server.id}&member_id={author.id}"
     resp: Response = get(URL)
     status: int = resp.status_code
+    CacheBacklog.update_backlog(status)#<---Updating the backlog in RAM
 
     #Problem during the request must exit the endpoint
     if status != 200:
@@ -39,7 +41,7 @@ async def get_top_active_channels(ctx: commands.Context, chart: str = "no"):
 
         await ctx.reply(f"❌ problem during a request to the API\nStatus: {status}")
         return
-    
+
     data: List[Dict[str, int]] = resp.json()["data"]
 
     if chart != "chart":

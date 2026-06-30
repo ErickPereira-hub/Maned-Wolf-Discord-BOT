@@ -7,6 +7,7 @@ from time import time
 import os
 from project.frameworks_and_drivers.discord_bot.view.graphs.channels import ChannelsGraph
 from project.frameworks_and_drivers.discord_bot.view.embed_middleware import get_emb_without_author
+from project.frameworks_and_drivers.databases.redis_db.cache_backlog.cache_backlog import CacheBacklog
 
 @MW_BOT.bot.command()
 async def get_nsfw_qtt(ctx: commands.Context, chart = "no"):
@@ -29,6 +30,7 @@ async def get_nsfw_qtt(ctx: commands.Context, chart = "no"):
     URL: str = os.getenv("BASE_URL") + f"/channel/analysis?server_id={server_id}&style=nsfw&member_id={author.id}"
     resp: Response = get(URL)
     status: int = resp.status_code
+    CacheBacklog.update_backlog(status)#<---Updating the backlog in RAM
 
     if status != 200:
 
@@ -38,7 +40,7 @@ async def get_nsfw_qtt(ctx: commands.Context, chart = "no"):
 
         await ctx.reply(f"❌ problem during a request to the API\nStatus code: {status}")
         return
-    
+
     #Catching the data
     data: Dict[str, Dict[str, int]] = resp.json()["data"]
     nsfw_yes_ch_qtt: int = data["yes"]

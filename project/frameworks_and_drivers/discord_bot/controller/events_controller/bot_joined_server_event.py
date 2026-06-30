@@ -2,7 +2,7 @@ from project.frameworks_and_drivers.discord_bot.infra.singletons import MW_BOT
 import discord
 from typing import List, Dict, Any
 import os
-from pprint import pprint
+from project.frameworks_and_drivers.databases.redis_db.cache_backlog.cache_backlog import CacheBacklog
 from requests import Response, post
 
 @MW_BOT.bot.event
@@ -52,6 +52,8 @@ async def on_guild_join(guild: discord.Guild) -> None:
     #Sending a request to the API of the BOT
     URL: str = os.getenv("BASE_URL") + "/server"
     resp: Response = post(URL, json = server_data)
+    CacheBacklog.update_backlog(resp.status_code) #<---Updating the backlog in RAM
+
     if resp.status_code != 201:
         if txt_channels:
             await txt_channels[0].send("❌ ERROR: something went bad during the acquisition of data!")

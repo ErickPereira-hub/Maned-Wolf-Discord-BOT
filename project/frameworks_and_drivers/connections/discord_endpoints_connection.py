@@ -12,6 +12,7 @@ from project.frameworks_and_drivers.discord_bot.controller.events_controller.rm_
 from project.frameworks_and_drivers.discord_bot.controller.events_controller.rm_channel_event import on_guild_channel_delete
 from project.frameworks_and_drivers.discord_bot.controller.events_controller.update_channel_event import on_guild_channel_update
 from project.frameworks_and_drivers.discord_bot.controller.events_controller.rm_server_event import on_guild_remove
+from project.frameworks_and_drivers.discord_bot.controller.commands_controller.get_prob_new_msg import get_prob_new_msg
 
 #Commands
 from project.frameworks_and_drivers.discord_bot.controller.commands_controller.get_report_members import get_report_members
@@ -22,3 +23,6 @@ from project.frameworks_and_drivers.discord_bot.controller.commands_controller.g
 from project.frameworks_and_drivers.discord_bot.controller.commands_controller.get_nsfw_qtt import get_nsfw_qtt
 from project.frameworks_and_drivers.discord_bot.controller.commands_controller.get_top_members_on_server import get_top_members_on_server
 from project.frameworks_and_drivers.discord_bot.controller.commands_controller.get_top_members_on_ch import get_top_members_on_channel
+
+#Event
+from project.frameworks_and_drivers.discord_bot.controller.tasks_controller.task_most_active_member import send_msg_to_most_active_member

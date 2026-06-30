@@ -1,7 +1,7 @@
 from project.application.utils.poisson_prob import poisson
-from typing import List
+from typing import List, Tuple, Dict
 
-class PoissonMember:
+class PoissonMemberOrMessage:
 
     def __init__(self):
         self.__avg: float | int | None = None
@@ -29,3 +29,13 @@ class PoissonMember:
         
         probability: float = sum(poisson(self.__avg, qtt) for qtt in range(from_qtt, until_qtt + 1))
         return probability
+
+    def get_discrete_points(self, incrs: List[int | float], until: int, dist_size: int) -> List[Tuple[int, float]]:
+        self.__dist_limit: int = dist_size if dist_size > until else until + 5
+        self.__region: range = range(0, self.__dist_limit + 1)
+        self.__dist_discrete_points: List[Tuple[int, float]] = list(zip(
+            [pos for pos in self.__region],
+            [
+                self.get_poisson_single_prob(input_qtt = pos, incrs = incrs) for pos in self.__region
+            ]))
+        return self.__dist_discrete_points

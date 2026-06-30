@@ -76,9 +76,19 @@ class AutomateMySQLDatabaseCreation:
                             message_edited_at DATETIME,
                             author_id BIGINT NOT NULL,
                             channel_id BIGINT NOT NULL,
-                            server_id BIGINT NOT NULL,
-                            FOREIGN KEY (server_id) REFERENCES servers(server_id),
                             FOREIGN KEY (channel_id) REFERENCES channels (channel_id)
+                        )
+                    """)
+                cursor.execute(
+                    """
+                        CREATE TABLE IF NOT EXISTS backlogs (
+                            backlog_id BIGINT PRIMARY KEY AUTO_INCREMENT,
+                            too_many_req INT NOT NULL,
+                            server_error INT NOT NULL,
+                            quantity INT NOT NULL,
+                            fail_quantity INT NOT NULL,
+                            ok_quantity INT NOT NULL,
+                            date datetime NOT NULL
                         )
                     """)
     
@@ -122,7 +132,7 @@ class AutomateMySQLDatabaseCreation:
                     SET err_flag = 1;
                 END;
             START TRANSACTION;
-            DELETE FROM messages WHERE server_id = _server_id;
+            DELETE FROM messages WHERE channel_id IN (SELECT channel_id FROM channels WHERE server_id = _server_id);
             DELETE FROM members WHERE server_id = _server_id;
             DELETE FROM channels WHERE server_id = _server_id;
             DELETE FROM servers WHERE server_id = _server_id;

@@ -25,8 +25,7 @@ class Msg(Resource):
             msg_date = self.__args["msg_date"],
             msg_edited_at = self.__args["msg_edited_at"],
             author_id = self.__args["author_id"],
-            channel_id = self.__args["channel_id"],
-            server_id = self.__args["server_id"]
+            channel_id = self.__args["channel_id"]
         )
 
         #Must run if everything went well

@@ -7,7 +7,7 @@ from project.frameworks_and_drivers.api_backend.middlewares.rate_blocker import 
 class ChannelAnalysis(Resource):
 
     def get(self) -> Response:
-        
+
         rate_blocker() #<--- Rate blocker
 
         #Getting the id of the server and the requested style
