@@ -5,30 +5,35 @@ from typing import Dict, Any
 
 class ViewPredictMembersQtt:
 
-    def __init__(self, day: int, show_poly: str, resp: Dict[str, Any], latency: float):
+    def __init__(self, day: int, show_poly: str, resp: Dict[str, Any] | None, latency: float):
         self.__day: int = day
         self.__show_poly: str = show_poly
         self.__resp: Dict[str, Any] = resp
         self.__latency: float = latency
     
     def __str__(self) -> str:
-        self.__day_t: str = self.__export_day(datetime.utcnow() + timedelta(days = self.__day))
-        self.__err: float | int = self.__resp["error"]
-        msg: str = f"🔗 Predicted total of members for day {self.__day_t}: {int(self.__resp["result"])} members"
-        msg += f"\n\nError concerning the data: {self.__err:.2f}%" 
-        if self.__show_poly == "show":
-            msg += f"\n\nBest polynomial acquired: {self.__resp["poly"]}"
-        msg += "\n\nReliability of the prediction:"
-
-        if self.__err < 5:
-            msg += "  ✅ almost infalible"
-        elif self.__err < 20:
-            msg += "  🔎 consistent"
+        if self.__resp is None:
+            return """Pediction failed: The server has not existed long enough, 
+            or the member count is too low for this action. Please, try again
+            a few days later or when your server has more members"""
         else:
-            msg += "  ⚠️ Untrustable"
-        
-        msg += f"\n\nBackend Latency: {int(1000 * self.__latency)} ms"
-        return msg
+            self.__day_t: str = self.__export_day(datetime.utcnow() + timedelta(days = self.__day))
+            self.__err: float | int = self.__resp["error"]
+            msg: str = f"🔗 Predicted total of members for day {self.__day_t}: {int(self.__resp["result"])} members"
+            msg += f"\n\nError concerning the data: {self.__err:.2f}%" 
+            if self.__show_poly == "show":
+                msg += f"\n\nBest polynomial acquired: {self.__resp["poly"]}"
+            msg += "\n\nReliability of the prediction:"
+
+            if self.__err < 5:
+                msg += "  ✅ almost infalible"
+            elif self.__err < 20:
+                msg += "  🔎 consistent"
+            else:
+                msg += "  ⚠️ Untrustable"
+            
+            msg += f"\n\nBackend Latency: {int(1000 * self.__latency)} ms"
+            return msg
 
     def __export_day(self, datetime: datetime) -> str:
         self.__day: str = str(datetime)[:10]

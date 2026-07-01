@@ -7,6 +7,7 @@ from time import time
 import os
 from project.frameworks_and_drivers.discord_bot.view.predict_members_qtt_view import ViewPredictMembersQtt
 from project.frameworks_and_drivers.databases.redis_db.cache_backlog.cache_backlog import CacheBacklog
+from project.frameworks_and_drivers.discord_bot.model.validate_prediction import validate_prediction
 
 @MW_BOT.bot.command()
 async def predict_members_qtt(ctx: commands.Context,
@@ -55,13 +56,14 @@ async def predict_members_qtt(ctx: commands.Context,
     
     time_end: float = time() #<--- End of the process
     interval: float = time_end - time_start #<--- Interval of execution in seconds
-    
+
     MSG: str = str(ViewPredictMembersQtt(
         day = day,
         show_poly = show_poly,
-        resp = data,
+        resp = data if validate_prediction(data["result"]) is not None else None,
         latency = interval
     ))
+
     await ctx.reply(MSG)
 
 @predict_members_qtt.error
@@ -73,6 +75,6 @@ async def error_predict_members_qtt(ctx: commands.Context, ERR: Exception):
         and show_poly can be \'show\', which means that you want to see the best fit polynomial used to predict
         your result. You don't need to define these parameters because they have default values (day = 1 and show_poly = \"no\")
     """
-    
+
     if isinstance(ERR, commands.BadArgument):
         await ctx.reply("❌ INVALID COMMAND: the first parameter must be a number" + END_MSG)
