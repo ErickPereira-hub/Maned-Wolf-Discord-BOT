@@ -16,6 +16,6 @@ async def on_raw_message_edit(payload: discord.RawMessageUpdateEvent):
     CacheBacklog.update_backlog(resp.status_code)#<---Updating the backlog in RAM
     
     #if something went bad on the API
-    ERR = f"ERROR ---> EDITION OF MESSAGE WITH ID {msg_id} WENT WRONG"
+    ERR = f"ERROR ---> UPDATE OF MESSAGE WITH ID {msg_id} WENT WRONG"
     if resp.status_code != 200:
         print(ERR)

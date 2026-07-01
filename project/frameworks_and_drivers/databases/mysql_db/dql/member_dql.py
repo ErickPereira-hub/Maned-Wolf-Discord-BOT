@@ -228,6 +228,8 @@ class MemberDQL:
         ) as scnx:
             with MySQLCursor(scnx) as cursor:
                 cursor.execute(SQL, (from_date, server_id))
-                self.__most_active_member_id = cursor.fetchall()[0][0]
+                data_from_db: List[Tuple[int,...]] = cursor.fetchall()
+                self.__most_active_member_id = -1 if len(data_from_db) == 0 else data_from_db[0][0]
+                #-1 means that we don't have the most active member because we didn't have message in the last day
 
         return self.__most_active_member_id

@@ -15,7 +15,7 @@ async def get_prob_new_msg(ctx: commands.Context, from_qtt: int, until_qtt: int,
     
     #Checking the parameters
     if from_qtt < 0 or until_qtt < from_qtt:
-        await ctx.reply("❌ WRONG COMMAND: the first and second arguments must be positive numbers and the second can't be lower than the first")
+        await ctx.reply("❌ INVALID COMMAND: the first and second arguments must be positive numbers and the second argument can't be lower than the first one")
         return
     
     #Checking if we can access the discord server
@@ -27,7 +27,7 @@ async def get_prob_new_msg(ctx: commands.Context, from_qtt: int, until_qtt: int,
     
     t_start: float = time()
     #First contact
-    PREP_MSG: str = "🔄 grabbing the data and evaluating the probability . . ."
+    PREP_MSG: str = "🔄 Gathering the data and evaluating the probability . . ."
     await ctx.reply(PREP_MSG)
     
     #Calling the data throughout the API
@@ -74,8 +74,8 @@ async def get_prob_new_msg(ctx: commands.Context, from_qtt: int, until_qtt: int,
     #Capturing the view with the image, delivering it to discord and deleting the image
     IMG_PATH: str = Graph.REPO_PATH + f"/msgs_{server.id}{author.id}_poisson.png"
     emb, file = get_emb_without_author(
-        title = "Probability distribution for the quantity of messages tomorrow",
-        desc = f"Probability of gaining {f"{from_qtt} to {until_qtt}" if from_qtt < until_qtt else from_qtt} messages into the server tomorrow: {(100 * prob):.3f} %",
+        title = "Probability distribution for tomorrow's new message count",
+        desc = f"Probability of gaining {f"{from_qtt} to {until_qtt}" if from_qtt < until_qtt else from_qtt} new messages on the server tomorrow: {(100 * prob):.3f} %",
         footer_txt = f"Backend Latency: {(1000 * t_interval):.2f} ms",
         img_path = IMG_PATH
     )
@@ -92,6 +92,6 @@ until_qtt is the quantity at the end, chart will show a distribution graph if yo
 parameter can be ignored, not showing the figure by default, Both from_qtt and until_qtt must be integers."""
 
     if isinstance(ERR, commands.MissingRequiredArgument):
-        await ctx.reply("❌ WRONG COMMAND: you forgot to define all parameters." + END_MSG)
+        await ctx.reply("❌ INVALID COMMAND: you forgot to define all parameters." + END_MSG)
     elif isinstance(ERR, commands.BadArgument):
-        await ctx.reply("❌ WRONG COMMAND: the first and second parameters must be numbers" + END_MSG)
+        await ctx.reply("❌ INVALID COMMAND: the first and second parameters must be numbers" + END_MSG)

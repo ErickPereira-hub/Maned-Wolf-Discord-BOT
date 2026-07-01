@@ -22,7 +22,7 @@ async def get_top_members_on_channel(ctx: commands.Context, chart: str = "no"):
         return
 
     #Informing the user that his/her data is being processed    
-    MSG_PREP: str = "🔄 grabbing the data . . ."
+    MSG_PREP: str = "🔄 Gathering the data . . ."
     await ctx.reply(MSG_PREP)
 
     t_start: float = time() #<--- Starting point in time

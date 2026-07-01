@@ -54,8 +54,8 @@ async def get_nsfw_qtt(ctx: commands.Context, chart = "no"):
 
         MSG: str = f"""
         🔗 NSFW information:
-        Quantity of NSFW channels: {nsfw_yes_ch_qtt} ( {(100 * nsfw_yes_ch_qtt / tot_qtt):.2f} % )
-        Quantity of non NSFW channels: {nsfw_no_ch_qtt} ( {(100 * nsfw_no_ch_qtt / tot_qtt):.2f} % )\n
+        NSFW channel count: {nsfw_yes_ch_qtt} ( {(100 * nsfw_yes_ch_qtt / tot_qtt):.2f} % )
+        Non-NSFW channel count: {nsfw_no_ch_qtt} ( {(100 * nsfw_no_ch_qtt / tot_qtt):.2f} % )\n
         Backend Latency: {(1000 * t_interval):.0f} ms
         """
 
@@ -76,7 +76,7 @@ async def get_nsfw_qtt(ctx: commands.Context, chart = "no"):
     #Capturing the view with the image, delivering it to discord and deleting the image
     IMG_PATH: str = ChannelsGraph.REPO_PATH + f"/channels_nsfw_{server.id}{author.id}.png"
     emb, file = get_emb_without_author(
-        title = "Quantity of NSFW and non NSFW channels",
+        title = "Quantity of NSFW and non-NSFW channels",
         desc = f"",
         footer_txt = f"Backend Latency: {(1000 * t_interval):.2f} ms",
         img_path = IMG_PATH

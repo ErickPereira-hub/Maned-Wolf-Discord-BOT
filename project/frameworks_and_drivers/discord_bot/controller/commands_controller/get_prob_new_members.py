@@ -15,7 +15,7 @@ async def get_prob_new_members(ctx: commands.Context, from_qtt: int, until_qtt: 
     
     #Checking the parameters
     if from_qtt < 0 or until_qtt < from_qtt:
-        await ctx.reply("❌ WRONG COMMAND: the first and second arguments must be positive numbers and the second can't be lower than the first")
+        await ctx.reply("❌ INVALID COMMAND: the first and second arguments must be positive numbers and the second argument can't be lower than the first one")
         return
     
     #Checking if we can access the discord server
@@ -27,7 +27,7 @@ async def get_prob_new_members(ctx: commands.Context, from_qtt: int, until_qtt: 
     
     t_start: float = time()
     #First contact
-    PREP_MSG: str = "🔄 grabbing the data and evaluating the probability . . ."
+    PREP_MSG: str = "🔄 Gathering data and evaluating the probability . . ."
     await ctx.reply(PREP_MSG)
     
     #Calling the data throughout the API
@@ -74,8 +74,8 @@ async def get_prob_new_members(ctx: commands.Context, from_qtt: int, until_qtt: 
     #Capturing the view with the image, delivering it to discord and deleting the image
     IMG_PATH: str = MembersGraph.REPO_PATH + f"/members_{server.id}{author.id}_poisson.png"
     emb, file = get_emb_without_author(
-        title = "Probability distribution for the quantity of members tomorrow",
-        desc = f"Probability of gaining {f"{from_qtt} to {until_qtt}" if from_qtt < until_qtt else from_qtt} members tomorrow: {(100 * prob):.3f} %",
+        title = "Probability distribution for tomorrow's new member count",
+        desc = f"Probability of gaining {f"{from_qtt} to {until_qtt}" if from_qtt < until_qtt else from_qtt} new members tomorrow: {(100 * prob):.3f} %",
         footer_txt = f"Backend Latency: {(1000 * t_interval):.2f} ms",
         img_path = IMG_PATH
     )
@@ -89,9 +89,9 @@ async def error_get_prob_new_members(ctx: commands.Context, ERR: Exception):
     END_MSG: str = """\n
 The command has the format: wolf?get_prob_new_members from_qtt unti_qtt chart, where from_qtt is the starting quantity,
 until_qtt is the quantity at the end, chart will show a distribution graph if you write \'chart\' at this place, but this
-parameter can be ignored, not showing the figure by default, Both from_qtt and until_qtt must be integers."""
+parameter can be ignored, not showing the figure by default. Both first two arguments (from_qtt and until_qtt) must be integers."""
 
     if isinstance(ERR, commands.MissingRequiredArgument):
-        await ctx.reply("❌ WRONG COMMAND: you forgot to define all parameters." + END_MSG)
+        await ctx.reply("❌ INVALID COMMAND: you forgot to define all parameters." + END_MSG)
     elif isinstance(ERR, commands.BadArgument):
-        await ctx.reply("❌ WRONG COMMAND: the first and second parameters must be numbers" + END_MSG)
+        await ctx.reply("❌ INVALID COMMAND: the first and second parameters must be numbers" + END_MSG)

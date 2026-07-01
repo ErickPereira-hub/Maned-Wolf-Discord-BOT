@@ -17,11 +17,11 @@ async def get_report_members(ctx: commands.Context, format: str, last_days: int 
 
     possib_format: Tuple[str, str] = ("chart", "table")
     if format not in possib_format:
-        await ctx.reply("❌ WRONG COMMAND: 'format' only accepts \'chart\' and \'table\'")
+        await ctx.reply("❌ INVALID COMMAND: 'format' only accepts \'chart\' and \'table\'")
         return
 
     #First contact
-    PREP_MSG: str = "🔄 grabbing and preparing the data . . ."
+    PREP_MSG: str = "🔄 Gathering and preparing the data . . ."
     await ctx.reply(PREP_MSG)
 
     #Getting and checking the server
@@ -75,7 +75,7 @@ async def get_report_members(ctx: commands.Context, format: str, last_days: int 
 
         #Preparing the embeding
         emb, file = get_emb_without_author(
-            title = "🔗 Graphical information about the quantity of members",
+            title = "🔗 Graphical overview of total member count",
             desc = view.get_desc(into_embed = True),
             footer_txt = f"Backend latency: {(1000 * t_interval):.0f} ms",
             img_path = f"{MembersGraph.REPO_PATH}/members_{server.id}{author.id}.png"
@@ -94,11 +94,11 @@ async def get_report_members(ctx: commands.Context, format: str, last_days: int 
 async def error_get_report_members(ctx: commands.Context, ERR: Exception):
 
     END_MSG: str = """\n
-The command has the format: wolf?show_members_qtt format last_days. For example:\n
-'wolf?show_members_qtt table 5' will show the quantity of members for the last 5 days in a table.\n
+The command has the format: wolf?get_report_members format last_days. For example:\n
+'wolf?get_report_members table 5' will show the quantity of members for the last 5 days in a table.\n
 Instead of table, you can use a chart to see the data in a chart!"""
 
     if isinstance(ERR, commands.MissingRequiredArgument):
-        await ctx.reply("❌ WRONG COMMAND: you forgot to define all parameters." + END_MSG)
+        await ctx.reply("❌ INVALID COMMAND: you forgot to define all parameters." + END_MSG)
     elif isinstance(ERR, commands.BadArgument):
-        await ctx.reply("❌ WRONG COMMAND: the third parameter must be a number" + END_MSG)
+        await ctx.reply("❌ INVALID COMMAND: the third parameter must be a number" + END_MSG)

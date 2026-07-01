@@ -1,6 +1,7 @@
 from mysql.connector import connection
+from mysql.connector.errors import ProgrammingError
 from mysql.connector.abstracts import MySQLConnectionAbstract
-from typing import Any
+from typing import List
 from .cnx.strong_cnx import StrongCnx
 from .cnx.weak_cnx import WeakCnx
 from .cursor import MySQLCursor
@@ -13,6 +14,7 @@ class AutomateMySQLDatabaseCreation:
         cls.__create_db()
         cls.__create_tables()
         cls.__create_procedures()
+        cls.__create_indexes()
 
     @classmethod
     def __create_db(cls) -> None:
@@ -144,3 +146,21 @@ class AutomateMySQLDatabaseCreation:
         END
                     """
                 )
+    
+    @classmethod
+    def __create_indexes(self) -> None:
+        with StrongCnx(
+            mysql_username=os.getenv("MYSQL_USERNAME"),
+            mysql_password=os.getenv("MYSQL_PASSWORD"),
+            db_name = os.getenv("MYSQL_DB_NAME")
+        ) as scnx:
+            with MySQLCursor(scnx) as cursor:
+                self.__indexes: List[str] = [
+                    "CREATE INDEX ind_msg_date ON messages(message_date)",
+                    "CREATE INDEX ind_member_del ON members(deleted_at)",
+                    "CREATE INDEX ind_member_id ON members(member_id_disc)"
+                ]
+                for SQL_indexing in self.__indexes:
+                    try:
+                        cursor.execute(SQL_indexing)
+                    except ProgrammingError: pass #<-- In this situation, PorgrammingError is raised when the index already exists, so we use this error to pass such uneeded insertion

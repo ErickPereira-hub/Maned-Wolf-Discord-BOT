@@ -53,7 +53,7 @@ async def get_cat_qtt(ctx: commands.Context, chart: str = "no"):
         t_interval: int = t_end - t_start
 
         MSG: str = f"""
-        🔗 Category information:
+        🔗 Information about the categories of channels:
         Quantity of channels (text and voice channels): {tot_qtt}\n
         Quantity of voice channels: {voice_ch_qtt} ( {(100 * voice_ch_qtt / tot_qtt):.2f} % )
         Quantity of text channels: {txt_ch_qtt} ( {(100 * txt_ch_qtt / tot_qtt):.2f} % )\n
@@ -77,7 +77,7 @@ async def get_cat_qtt(ctx: commands.Context, chart: str = "no"):
     #Capturing the view with the image, delivering it to discord and deleting the image
     IMG_PATH: str = ChannelsGraph.REPO_PATH + f"/channels_cat_{server.id}{author.id}.png"
     emb, file = get_emb_without_author(
-        title = "Quantities of channels by category",
+        title = "Quantity of channels by category",
         desc = f"",
         footer_txt = f"Backend Latency: {(1000 * t_interval):.2f} ms",
         img_path = IMG_PATH

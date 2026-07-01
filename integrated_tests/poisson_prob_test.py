@@ -1,4 +1,4 @@
-from project.application.poisson_member import PoissonMember
+from project.application.poisson_member_or_msg import PoissonMember
 from typing import List
 
 def test_poisson() -> None:

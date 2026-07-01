@@ -16,7 +16,7 @@ async def predict_members_qtt(ctx: commands.Context,
     time_start: float = time() #<--- Begining
 
     if day > 3 or day < 1:
-        await ctx.reply("❌ Range of days not allowed. You can do predictions from 1 to 3 days from now on")
+        await ctx.reply("❌ Range of days not allowed. Forecast available for 1 to 3 days from today's day")
         return
 
     server: Guild = ctx.guild #<--- Server where the request was done
@@ -75,4 +75,4 @@ async def error_predict_members_qtt(ctx: commands.Context, ERR: Exception):
     """
     
     if isinstance(ERR, commands.BadArgument):
-        await ctx.reply("❌ WRONG COMMAND: the first parameter must be a number" + END_MSG)
+        await ctx.reply("❌ INVALID COMMAND: the first parameter must be a number" + END_MSG)

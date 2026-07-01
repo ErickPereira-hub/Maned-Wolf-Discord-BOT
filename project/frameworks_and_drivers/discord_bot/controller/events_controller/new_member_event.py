@@ -24,4 +24,4 @@ async def on_member_join(member: Member):
 
     #If the operation wasn't done
     if resp.status_code != 201:
-        await member.send("❌ TROUBLE: Our family of maned wolfs couldn't get your data : ^ ( ")
+        await member.send("❌ TROUBLE: I wasn't able to fetch your data : ^ ( ")

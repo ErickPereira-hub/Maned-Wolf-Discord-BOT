@@ -26,4 +26,4 @@ async def on_guild_remove(guild: discord.Guild):
         await owner.send("❌ Couldn't do the deletion operation properly")
         return
     
-    await owner.send("✅ Deletion operation completed. We don't have your data with us anymore!")
+    await owner.send("✅ Deletion operation completed. I don't have your data anymore!")

@@ -68,7 +68,7 @@ async def on_guild_join(guild: discord.Guild) -> None:
 
 🚀 Thank you by integrating \'{MW_BOT.name}\' to your server!
     
-Our familly of named wolfs will take care of the data from your server from now on!
+I'll be managing the server data from now on
     """
 
     #Sending a notification to the owner and channel

@@ -26,7 +26,7 @@ async def on_guild_channel_create(channel: discord.abc.GuildChannel):
     if resp.status_code != 201:
         if isinstance(channel, discord.TextChannel):
             try:
-                await channel.send("❌ TROUBLE: Our family of maned wolfs couldn't get your data : ^ ( ")
+                await channel.send("❌ TROUBLE: I wasn't able to fetch your data : ^ ( ")
             except discord.Forbidden:
                 print(ERR_MSG + " :: NOT ALLOWED BY DISCORD")
             else:
@@ -38,6 +38,6 @@ async def on_guild_channel_create(channel: discord.abc.GuildChannel):
     #When the response status is 201, the operation has been completed, so we return a good message to that channel
     try:
         if isinstance(channel, discord.TextChannel):
-            await channel.send("This channel activity is currently being tracked by our family of named wolfs!")
+            await channel.send("This channel activity is currently being tracked by me!")
     except discord.Forbidden:
         pass

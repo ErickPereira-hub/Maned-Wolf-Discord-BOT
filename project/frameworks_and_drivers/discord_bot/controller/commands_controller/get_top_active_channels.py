@@ -23,7 +23,7 @@ async def get_top_active_channels(ctx: commands.Context, chart: str = "no"):
 
     t_start: float = time()
     #Message informing that the application is preparing stuff
-    MSG_PREP: str = "🔄 grabbing the data . . ."
+    MSG_PREP: str = "🔄 Gathering the data . . ."
     await ctx.reply(MSG_PREP)
 
     #Sending a request of data to the API
@@ -69,7 +69,7 @@ async def get_top_active_channels(ctx: commands.Context, chart: str = "no"):
     t_interval: float = t_end - t_start
     
     emb, file = get_emb_without_author(
-        title = "Volumes of messages for the most active channels",
+        title = "Volume of messages for the most active channels",
         desc = f"",
         footer_txt = f"Backend Latency: {(1000 * t_interval):.2f} ms",
         img_path = IMG_PATH

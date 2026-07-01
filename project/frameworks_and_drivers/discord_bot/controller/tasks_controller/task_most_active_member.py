@@ -16,7 +16,12 @@ async def send_msg_to_most_active_member():
         #Requesting the most active member inside the database for the server
         URL: str = os.getenv("BASE_URL") + f"/member/most_active_member?server_id={server.id}&from_date={since}"
         resp: Response = get(URL)
-        member: User = await MW_BOT.bot.fetch_user(resp.json()['id'])
+        data: int = resp.json()['id']
+
+        if data == -1: #<--- -1 for data means that we don't have a most active member because the last day hasn't comments in any channel of the server (very commom in small servers)
+            continue
+
+        member: User = await MW_BOT.bot.fetch_user(data)
 
         #Sending the message to the most active member
         try:

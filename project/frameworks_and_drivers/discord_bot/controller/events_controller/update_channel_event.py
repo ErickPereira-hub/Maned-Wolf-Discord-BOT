@@ -18,6 +18,6 @@ async def on_guild_channel_update(before: discord.abc.GuildChannel, after: disco
     CacheBacklog.update_backlog(resp.status_code)#<---Updating the backlog in RAM
     
     #if something went bad on the API
-    ERR = f"ERROR ---> EDITION OF CHANNEL WITH ID {channel_id} WENT WRONG"
+    ERR = f"ERROR ---> UPDATE OF CHANNEL WITH ID {channel_id} WENT WRONG"
     if resp.status_code != 200:
         print(ERR)
