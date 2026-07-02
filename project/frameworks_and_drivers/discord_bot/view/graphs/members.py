@@ -23,7 +23,7 @@ class MembersGraph(Graph):
         plt.pie(
             x = [list(data.values())[0] for data in dataset],
             labels = [f"[ {list(data.values())[0]} ]  " + get_max_str_size(list(data.keys())[0]) for data in dataset],
-            colors = [cls.WEAK_COLOR, cls.STRONG_COLOR]
+            colors = [cls.WEAK_COLOR, cls.STRONG_COLOR, "#62FFBE", "#41FFD0", "#14BCFF"]
         )
         plt.savefig(cls.REPO_PATH + f"/best_members_by_{option}_{server_id}{author_id}.png")
         plt.clf()
