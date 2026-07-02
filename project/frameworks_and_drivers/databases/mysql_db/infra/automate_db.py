@@ -50,7 +50,7 @@ class AutomateMySQLDatabaseCreation:
                             channel_name VARCHAR(50),
                             category VARCHAR(1024),
                             is_nsfw ENUM("yes", "no") NOT NULL,
-                            create_at DATETIME DEFAULT NOW(),
+                            created_at DATETIME DEFAULT NOW(),
                             server_id BIGINT NOT NULL,
                             FOREIGN KEY (server_id) REFERENCES servers(server_id)
                         )
@@ -58,12 +58,12 @@ class AutomateMySQLDatabaseCreation:
                 cursor.execute(
                     """
                         CREATE TABLE IF NOT EXISTS members (
-                            member_id BIGINT PRIMARY KEY AUTO_INCREMENT,
+                            member_id INT PRIMARY KEY AUTO_INCREMENT,
                             member_id_disc BIGINT,
                             member_name VARCHAR(50),
-                            category ENUM("human", "bot"),
+                            category VARCHAR(255),
                             joined_at DATETIME,
-                            account_create_at DATETIME,
+                            account_created_at DATETIME,
                             deleted_at DATETIME,
                             server_id BIGINT NOT NULL,
                             FOREIGN KEY (server_id) REFERENCES servers(server_id)

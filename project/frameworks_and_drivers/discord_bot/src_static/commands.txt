@@ -6,7 +6,7 @@ Prefix to create a command: wolf?
 
 [ 3 ] wolf?get_prob_new_members <min> <max> ==> Shows the probability of getting bettween <min> and <max> new members in the server tomorrow. To see a distribution graph with the probabilities, use 'wolf?get_prob_new_members <min> <max> chart'. Detail: <min> and <max> are integers and the first must be lower or equal to the second number
 
-[ 4 ] wolf?get_prob_new_msg <min> <max> ==> Shows the probability of gaining <number1> to <number2> new members in the server tomorrow. The pattern is the same as the previous command (3)
+[ 4 ] wolf?get_prob_new_msg <min> <max> ==> Shows the probability of gaining <min> to <max> new members in the server tomorrow. The pattern is the same as the previous command (3)
 
 [ 5 ] wolf?get_report_members format ==> Shows a report of member joins, leaves, and the total server member count. 'format' can be either 'table' or 'chart', with format as 'table' showing a table and format as 'chart' displaying the data as a chart.
 
