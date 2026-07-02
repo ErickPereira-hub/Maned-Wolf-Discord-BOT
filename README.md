@@ -12,6 +12,7 @@ The main objectives of the bot are:
 
  ➤ to deliver accurate forecasts of upcoming member growth and message volume, powered by Poisson distribution and polynomial regression.
 
+![](./project/frameworks_and_drivers/discord_bot/src_static/schema.png)
 ---
 
 **Main Features**
