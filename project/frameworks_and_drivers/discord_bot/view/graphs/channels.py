@@ -1,5 +1,7 @@
+import matplotlib
+matplotlib.use("Agg")
 import matplotlib.pyplot as plt
-from typing import List, Tuple
+from typing import List
 from project.frameworks_and_drivers.discord_bot.view.graphs.graph import Graph
 
 class ChannelsGraph(Graph):

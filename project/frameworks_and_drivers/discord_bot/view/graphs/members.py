@@ -1,5 +1,7 @@
+import matplotlib
+matplotlib.use("Agg")
 import matplotlib.pyplot as plt
-from typing import List, Tuple, Dict
+from typing import List, Dict
 from project.frameworks_and_drivers.discord_bot.view.graphs.graph import Graph
 from project.application.utils.max_str_size import get_max_str_size
 

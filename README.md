@@ -93,7 +93,7 @@ Prefix to create a command: wolf?
 
 \[ 5 \] wolf?get\_report\_members format \==\> Shows a report of member joins, leaves, and the total server member count. 'format' can be either 'table' or 'chart', with format as 'table' showing a table and format as 'chart' displaying the data as a chart.
 
-\[ 6 \] wolf?get\_top\_active\_channels \==\> Shows the most active text channels based on message volume. To see the data distributed in a bar chart, use the command 'wolf?get\_top\_active\_channels chart'
+\[ 6 \] wolf?get\_top\_active\_channels \==\>  Shows the most active text channels based on message volume. To see the data distributed in a bar chart, use the command 'wolf?get\_top\_active\_channels chart'
 
 \[ 7 \] wolf?get\_top\_members\_on\_channel \==\> Shows the most active members in the text channel where the command is placed based on message volume. 'wolf?get\_top\_members\_on\_channel chart' displays the data through a pie chart.
 
