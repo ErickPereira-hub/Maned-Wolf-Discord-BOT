@@ -1,7 +1,7 @@
-from math import factorial, e
+from math import factorial, e, log
 from typing import Callable
 
-poisson: Callable[[int | float, int], float] = lambda avg, input_qtt : ((avg ** input_qtt) * (e ** (-avg))) / factorial(input_qtt)
+poisson: Callable[[int | float, int], float] = lambda avg, input_qtt : e ** (log(avg) * input_qtt + (-avg) - log(factorial(input_qtt)))
 
 if __name__ == "__main__":
-    print(poisson(10, 10))
+    print(poisson(3, 3) * 100)

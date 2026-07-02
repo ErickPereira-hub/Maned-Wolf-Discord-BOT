@@ -1,7 +1,8 @@
 from project.domain.entities.poly_entity import Polynomial
 from typing import Tuple, List
 from numpy import linalg
-from numpy import array
+from numpy import array, astype, float64
+from pprint import pprint
 
 class RegressionFactory:
 
@@ -39,7 +40,9 @@ class RegressionFactory:
             for pos_hor in range(deg + 1):
                 self.__row.append(sum(point[0] ** (pos_hor + pos_vert) for point in dataset))
             self.__huge_matrix.append(self.__row) #Adding a new line to the matrix
-        return array([array(row) for row in self.__huge_matrix])
+        self.__huge_matrix_arr: array = array([array(row) for row in self.__huge_matrix])
+        self.__huge_matrix_arr_cast: array = self.__huge_matrix_arr.astype(float64) #<--- Converting huge integers to float
+        return self.__huge_matrix_arr_cast
 
     def __create_independent_terms_vector(self, dataset: List[Tuple[int | float, int | float]], deg: int) -> array:
         self.__itv: List[float | int] = list()
@@ -48,7 +51,7 @@ class RegressionFactory:
         #Adding the remaining sums
         for pos in range(1, deg + 1):
             self.__itv.append(sum(point[1] * point[0] ** pos for point in dataset))
-        return array(self.__itv).reshape((-1, 1))
+        return array(self.__itv).reshape((-1, 1)).astype(float64)
 
     def __get_inverse(self, square_matrix: array) -> array:
         self.__mat: array = square_matrix

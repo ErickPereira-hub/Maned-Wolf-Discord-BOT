@@ -1,5 +1,5 @@
 from project.application.utils.poisson_prob import poisson
-from typing import List, Tuple, Dict
+from typing import List, Tuple
 
 class PoissonMemberOrMessage:
 

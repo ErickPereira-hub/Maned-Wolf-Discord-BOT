@@ -27,7 +27,7 @@ async def get_nsfw_qtt(ctx: commands.Context, chart = "no"):
     await ctx.reply(PREP_MSG)
 
     #Calling the data throughout the API
-    URL: str = os.getenv("BASE_URL") + f"/channel/analysis?server_id={server_id}&style=nsfw&member_id={author.id}"
+    URL: str = os.getenv("BASE_URL") + f"/channel/analysis?server_id={server_id}&member_id={author.id}"
     resp: Response = get(URL)
     status: int = resp.status_code
     CacheBacklog.update_backlog(status)#<---Updating the backlog in RAM
@@ -43,6 +43,7 @@ async def get_nsfw_qtt(ctx: commands.Context, chart = "no"):
 
     #Catching the data
     data: Dict[str, Dict[str, int]] = resp.json()["data"]
+
     nsfw_yes_ch_qtt: int = data["yes"]
     nsfw_no_ch_qtt: int = data["no"]
     tot_qtt: int = nsfw_yes_ch_qtt + nsfw_no_ch_qtt

@@ -25,14 +25,14 @@ class NewServerInTransaction:
             START TRANSACTION;
             INSERT INTO servers VALUES (
                 {nw_presenter["server_data"]["id"]},
-                '{nw_presenter["server_data"]["name"]}',
-                '{nw_presenter["server_data"]["owner_name"]}',
+                "{nw_presenter["server_data"]["name"]}",
+                "{nw_presenter["server_data"]["owner_name"]}",
                 '{nw_presenter["server_data"]["creation_date"]}',
                 '{str(datetime.utcnow())}',
                 '{nw_presenter["server_data"]["description"]}');
             INSERT INTO channels VALUES {",".join([f'''(
                                         {nw_presenter["channels_data"][pos]["id"]},
-                                        '{nw_presenter["channels_data"][pos]["name"]}',
+                                        "{nw_presenter["channels_data"][pos]["name"]}",
                                         '{nw_presenter["channels_data"][pos]["category"]}',
                                         '{nw_presenter["channels_data"][pos]["is_nsfw"]}',
                                         '{nw_presenter["channels_data"][pos]["created_at"]}',
@@ -42,10 +42,10 @@ class NewServerInTransaction:
             member_name,
             category,
             joined_at,
-            account_create_at,
+            account_created_at,
             server_id) VALUES {",".join([f'''(
                                 {nw_presenter["members_data"][pos]["id"]},
-                                '{nw_presenter["members_data"][pos]["name"]}',
+                                "{nw_presenter["members_data"][pos]["name"]}",
                                 '{nw_presenter["members_data"][pos]["category"]}',
                                 '{nw_presenter["members_data"][pos]["joined_at"]}',
                                 '{nw_presenter["members_data"][pos]["account_create_at"]}',

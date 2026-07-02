@@ -27,7 +27,7 @@ The main objectives of the bot are:
 
 ➤ Provides a command that identifies the most active channels in the server, ranked by message volume.
 
-➤ Includes a command that displays the quantity of channels by category. In addition, it includes a command that displays the volume of channels based on NSFW and non-NSFW.
+➤ Includes a command that displays the volume of channels based on NSFW and non-NSFW.
 
 ➤ The commands allow the user to see graphical figures that display the data.
 
@@ -84,23 +84,21 @@ detail: the member entity is not just a person in discord, it is an entity that 
 
 Prefix to create a command: wolf?
 
-\[ 1 \] wolf?get\_cat\_qtt \==\> Displays the total number of channels aggregated by category. To view this data as a pie chart, use 'wolf?get\_cat\_qtt chart'.
+\[ 1 \] wolf?get\_nsfw\_qtt \==\> Displays the quantity of channels that are nsfw and the quantity of non-nsfw channels. To view this data as a pie chart, use 'wolf?get\_nsfw\_qtt chart'
 
-\[ 2 \] wolf?get\_nsfw\_qtt \==\> Displays the quantity of channels that are nsfw and the quantity of non-nsfw channels. To view this data as a pie chart, use 'wolf?get\_nsfw\_qtt chart'
+\[ 2 \] wolf?get\_prob\_new\_members \<min\> \<max\> \==\> Shows the probability of getting bettween \<min\> and \<max\> new members in the server tomorrow. To see a distribution graph with the probabilities, use 'wolf?get\_prob\_new\_members \<min\> \<max\> chart'. Detail: \<min\> and \<max\> are integers and the first must be lower or equal to the second number
 
-\[ 3 \] wolf?get\_prob\_new\_members \<min\> \<max\> \==\> Shows the probability of getting bettween \<min\> and \<max\> new members in the server tomorrow. To see a distribution graph with the probabilities, use 'wolf?get\_prob\_new\_members \<min\> \<max\> chart'. Detail: \<min\> and \<max\> are integers and the first must be lower or equal to the second number
+\[ 3 \] wolf?get\_prob\_new\_msg \<min\> \<max\> \==\> Shows the probability of gaining \<min\> to \<max\> new members in the server tomorrow. The pattern is the same as the previous command (3)
 
-\[ 4 \] wolf?get\_prob\_new\_msg \<min\> \<max\> \==\> Shows the probability of gaining \<min\> to \<max\> new members in the server tomorrow. The pattern is the same as the previous command (3)
+\[ 4 \] wolf?get\_report\_members format \==\> Shows a report of member joins, leaves, and the total server member count. 'format' can be either 'table' or 'chart', with format as 'table' showing a table and format as 'chart' displaying the data as a chart.
 
-\[ 5 \] wolf?get\_report\_members format \==\> Shows a report of member joins, leaves, and the total server member count. 'format' can be either 'table' or 'chart', with format as 'table' showing a table and format as 'chart' displaying the data as a chart.
+\[ 5 \] wolf?get\_top\_active\_channels \==\>  Shows the most active text channels based on message volume. To see the data distributed in a bar chart, use the command 'wolf?get\_top\_active\_channels chart'
 
-\[ 6 \] wolf?get\_top\_active\_channels \==\>  Shows the most active text channels based on message volume. To see the data distributed in a bar chart, use the command 'wolf?get\_top\_active\_channels chart'
+\[ 6 \] wolf?get\_top\_members\_on\_channel \==\> Shows the most active members in the text channel where the command is placed based on message volume. 'wolf?get\_top\_members\_on\_channel chart' displays the data through a pie chart.
 
-\[ 7 \] wolf?get\_top\_members\_on\_channel \==\> Shows the most active members in the text channel where the command is placed based on message volume. 'wolf?get\_top\_members\_on\_channel chart' displays the data through a pie chart.
+\[ 7 \] wolf?get\_top\_members\_on\_server \==\> Shows the most active members in the entire server based on message volume. 'wolf?get\_top\_members\_on\_channel chart' displays the data through a pie chart.
 
-\[ 8 \] wolf?get\_top\_members\_on\_server \==\> Shows the most active members in the entire server based on message volume. 'wolf?get\_top\_members\_on\_channel chart' displays the data through a pie chart.
-
-\[ 9 \] wolf?predict\_members\_qtt \==\> Shows the predicted number of members tomorrow aligned with the prediction error. 'Wolf?predict\_members\_qtt N' shows the prediction for the next N days from today's day, where N must be between 1 and 3\. 'wolf?predict\_members\_qtt N show' works as before, but it also displays the polynomial used to compute the prediction.
+\[ 8 \] wolf?predict\_members\_qtt \==\> Shows the predicted number of members tomorrow aligned with the prediction error. 'Wolf?predict\_members\_qtt N' shows the prediction for the next N days from today's day, where N must be between 1 and 3\. 'wolf?predict\_members\_qtt N show' works as before, but it also displays the polynomial used to compute the prediction.
 
 Example:
 

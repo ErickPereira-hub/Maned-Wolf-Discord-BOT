@@ -52,6 +52,7 @@ class MemberDQL:
            db_name = os.getenv("MYSQL_DB_NAME")
         ) as scnx:
             with MySQLCursor(scnx) as cursor:
+                cursor.execute("SET @@cte_max_recursion_depth = 8000")
                 cursor.execute(SQL, (server_id, server_id, server_id))
                 dirty_member_qtt: List[Tuple[str, int, int, int]] = cursor.fetchall()
         
@@ -146,6 +147,7 @@ class MemberDQL:
            db_name = os.getenv("MYSQL_DB_NAME")
         ) as scnx:
             with MySQLCursor(scnx) as cursor:
+                cursor.execute("SET @@cte_max_recursion_depth = 8000")
                 cursor.execute(SQL, (server_id, server_id, server_id))
                 dirty_member_qtt: List[Tuple[str, int, int, int]] = cursor.fetchall()
         

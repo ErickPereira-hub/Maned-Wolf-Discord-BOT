@@ -17,7 +17,7 @@ class ChannelDQL:
                 channels AS c LEFT JOIN messages AS m
                 ON c.channel_id = m.channel_id
             WHERE
-                c.server_id = %s AND c.category = "Text channels"
+                c.server_id = %s
             GROUP BY
                 c.channel_id
             ORDER BY
@@ -38,41 +38,12 @@ class ChannelDQL:
                     self.__top_active_ch.append(info)
         return self.__top_active_ch
     
-    def get_ch_cat_from_db(self, server_id: int) -> Dict[str, int]:
-        self.__resp_cat: Dict[str, int] = dict()
-        self.__SQL_CAT: str = """
-            SELECT category, COUNT(*) AS qtt
-            FROM channels
-            WHERE category IN ("Text channels", "Voice channels") AND server_id = %s
-            GROUP BY category
-        """
-        self.__d_cat: List[Tuple[str, int]] | None = None
-        #Getting the categories quantities from MySQL
-        with StrongCnx(
-            mysql_username = os.getenv("MYSQL_USERNAME"),
-            mysql_password = os.getenv("MYSQL_PASSWORD"),
-            db_name = os.getenv("MYSQL_DB_NAME")
-        ) as scnx:
-            with MySQLCursor(scnx) as cursor:
-                cursor.execute(self.__SQL_CAT, (server_id,))
-                self.__d_cat = cursor.fetchall()
-
-        #Filling the option that didn't come with the query
-        if "Text channels" not in [data[0] for data in self.__d_cat]:
-            self.__resp_cat.update({"Text channels" : 0})
-        if "Voice channels" not in [data[0] for data in self.__d_cat]:
-            self.__resp_cat.update({"Voice channels" : 0})
-        for opt, qtt in self.__d_cat:
-            self.__resp_cat.update({opt : qtt})
-
-        return self.__resp_cat
-    
     def get_ch_nsfw_from_db(self, server_id: int) -> Dict[str, int]:
         self.__resp_nsfw: Dict[str, int] = dict()
         self.__SQL_NSFW: str = """
             SELECT is_nsfw, COUNT(*) AS qtt
             FROM channels
-            WHERE is_nsfw IN ("no", "yes") AND server_id = %s AND category IN ("Text channels", "Voice channels")
+            WHERE is_nsfw IN ("no", "yes") AND server_id = %s
             GROUP BY is_nsfw
         """
         self.__d_nsfw: List[Tuple[str, int]] | None = None

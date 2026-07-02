@@ -1,4 +1,4 @@
-from project.application.poisson_member_or_msg import PoissonMember
+from project.application.poisson_member_or_msg import PoissonMemberOrMessage
 from typing import List
 
 def test_poisson() -> None:
@@ -12,7 +12,7 @@ def test_poisson() -> None:
     probability: List[float] = list() #<--- Least of Poisson's probabilities
 
     for vmocked_from, vmocked_until in zip(mocked_from, mocked_until):
-        probability.append(PoissonMember().get_poisson_in_range(
+        probability.append(PoissonMemberOrMessage().get_poisson_in_range(
             from_qtt = vmocked_from,
             until_qtt = vmocked_until,
             incrs = mocked_dataset
