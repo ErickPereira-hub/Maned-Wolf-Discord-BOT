@@ -72,6 +72,8 @@ This project adopts Clean Architecture in its core. The Application layer contai
 
 **Observability:** Backend requests are aggregated in Redis, with each request contributing to the in‑memory dataset. Every minute, this aggregated data is sent into MySQL under an entity called backlogs, enabling historical analysis of past activity. Aggregation is maintained in a single hashmap, ensuring space complexity remains O(1) rather than O(n). This design optimizes RAM usage while still allowing efficient retrieval of logs.
 
+![](./project/frameworks_and_drivers/discord_bot/src_static/logs.png)
+
 **Relational Database:** The database stores and relates data on messages, members, channels, and servers. Queries are implemented directly with raw SQL rather than using an ORM. Database creation, indexing, and stored procedures are automated with Python and executed when the API starts its process. When a server integrates with the bot, its data is automatically downloaded into the database throughout a transaction. Conversely, if the server’s admin cancels integration, all data related to his/her server is automatically deleted. The bot also updates the database through the API whenever messages are added, edited, or deleted, and when members join or leave. These operations are tracked using asynchronous Discord events. 
 
 ![](./project/frameworks_and_drivers/discord_bot/src_static/db_schema.png)
