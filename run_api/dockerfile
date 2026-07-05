@@ -1,0 +1,14 @@
+# syntax=docker/dockerfile:1
+
+FROM python:3.13-slim
+
+WORKDIR /api
+
+COPY requirements.txt requirements.txt
+
+RUN pip install -r requirements.txt
+
+COPY ./project ./project
+COPY ./run_api ./run_api
+
+CMD ["python", "./run_api/run_api.py"]

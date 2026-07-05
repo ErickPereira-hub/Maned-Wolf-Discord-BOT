@@ -5,7 +5,7 @@ class WeakCnx:
 
     def __init__(self, mysql_username: str, mysql_password: str):
         self.__cnx: MySQLConnectionAbstract = connect(
-            host = "localhost",
+            host = "mysql_db",
             user = mysql_username,
             password = mysql_password
         )

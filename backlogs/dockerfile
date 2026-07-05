@@ -1,0 +1,14 @@
+# syntax=docker/dockerfile:1
+
+FROM python:3.13-slim
+
+WORKDIR /backlogs
+
+COPY requirements.txt requirements.txt
+
+RUN pip install -r requirements.txt
+
+COPY ./project ./project
+COPY ./backlogs ./backlogs
+
+CMD ["python", "./backlogs/backlogs.py"]

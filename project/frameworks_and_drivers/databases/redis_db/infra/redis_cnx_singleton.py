@@ -1,7 +1,7 @@
 from redis import Redis
 
 rcnx: Redis = Redis(
-    host = "localhost",
+    host = "redis_db",
     port = 6379,
     db = 0
 )

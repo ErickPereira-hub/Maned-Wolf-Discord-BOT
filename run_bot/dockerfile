@@ -1,0 +1,14 @@
+# syntax=docker/dockerfile:1
+
+FROM python:3.13-slim
+
+WORKDIR /bot
+
+COPY requirements.txt requirements.txt
+
+RUN pip install -r requirements.txt
+
+COPY ./project ./project
+COPY ./run_bot ./run_bot
+
+CMD ["python", "./run_bot/run_bot.py"]
