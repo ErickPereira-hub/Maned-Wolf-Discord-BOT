@@ -3,6 +3,7 @@ from project.frameworks_and_drivers.databases.mysql_db.infra.cursor import MySQL
 import os
 from project.interface_adapters.presenters.new_server_presenter import NewServerPresenter
 from datetime import datetime
+from project.application.utils.clean_apostrophe import clean_apostrophe
 
 class NewServerInTransaction:
 
@@ -25,15 +26,15 @@ class NewServerInTransaction:
             START TRANSACTION;
             INSERT INTO servers VALUES (
                 {nw_presenter["server_data"]["id"]},
-                "{nw_presenter["server_data"]["name"]}",
-                "{nw_presenter["server_data"]["owner_name"]}",
+                '{clean_apostrophe(nw_presenter["server_data"]["name"])}',
+                '{clean_apostrophe(nw_presenter["server_data"]["owner_name"])}',
                 '{nw_presenter["server_data"]["creation_date"]}',
                 '{str(datetime.utcnow())}',
-                '{nw_presenter["server_data"]["description"]}');
+                '{clean_apostrophe(nw_presenter["server_data"]["description"])}');
             INSERT INTO channels VALUES {",".join([f'''(
                                         {nw_presenter["channels_data"][pos]["id"]},
-                                        "{nw_presenter["channels_data"][pos]["name"]}",
-                                        '{nw_presenter["channels_data"][pos]["category"]}',
+                                        '{clean_apostrophe(nw_presenter["channels_data"][pos]["name"])}',
+                                        '{clean_apostrophe(nw_presenter["channels_data"][pos]["category"])}',
                                         '{nw_presenter["channels_data"][pos]["is_nsfw"]}',
                                         '{nw_presenter["channels_data"][pos]["created_at"]}',
                                         {nw_presenter["server_data"]["id"]})''' for pos in range(len(nw_presenter["channels_data"]))]) + ";"}
@@ -45,8 +46,8 @@ class NewServerInTransaction:
             account_created_at,
             server_id) VALUES {",".join([f'''(
                                 {nw_presenter["members_data"][pos]["id"]},
-                                "{nw_presenter["members_data"][pos]["name"]}",
-                                '{nw_presenter["members_data"][pos]["category"]}',
+                                '{clean_apostrophe(nw_presenter["members_data"][pos]["name"])}',
+                                '{clean_apostrophe(nw_presenter["members_data"][pos]["category"])}',
                                 '{nw_presenter["members_data"][pos]["joined_at"]}',
                                 '{nw_presenter["members_data"][pos]["account_create_at"]}',
                                 {nw_presenter["server_data"]["id"]})''' for pos in range(len(nw_presenter["members_data"]))]) + ";"}

@@ -31,6 +31,6 @@ async def on_message(msg: Message):
 
     #If the operation wasn't done
     if resp.status_code != 201:
-        await msg.author.send("❌ TROUBLE: the database couldn't capture your massage")
+        print("❌ TROUBLE: the database couldn't capture a massage")
     
     await MW_BOT.bot.process_commands(msg)
