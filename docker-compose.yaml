@@ -15,7 +15,7 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: ${DOCKER_MYSQL_PASSWORD}
     volumes:
-      - mysql_vol:/var/lib/mysql
+      - mysql_ultra_vol:/var/lib/mysql
 
   api:
     build:
@@ -70,4 +70,4 @@ networks:
     driver: bridge
 
 volumes:
-  mysql_vol:
+  mysql_ultra_vol:

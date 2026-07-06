@@ -4,4 +4,4 @@ mysql_credentials.env
 api_credentials.env
 test.py
 /__pycache__
-docker.env
+.env
