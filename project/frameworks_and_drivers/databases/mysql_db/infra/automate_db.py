@@ -40,7 +40,8 @@ class AutomateMySQLDatabaseCreation:
                             server_owner_name VARCHAR(200),
                             creation_date DATETIME,
                             joined_the_bot_since DATETIME DEFAULT NOW(),
-                            server_desc VARCHAR(1024)
+                            server_desc VARCHAR(1024),
+                            secured_token VARCHAR(16)
                         )
                     """)
                 cursor.execute(

@@ -61,6 +61,8 @@ async def on_guild_join(guild: discord.Guild) -> None:
             await server_owner.send("❌ ERROR: something went bad during the acquisition of data!")
         return
 
+    JSON: Dict[str, str] = resp.json()
+
     #Preparing the final message.
     txt_channel_msg: str = f"🚀 Bot {MW_BOT.name} joined the server!"
     owner_msg: str = f"""
@@ -69,6 +71,8 @@ async def on_guild_join(guild: discord.Guild) -> None:
 🚀 Thank you by integrating \'{MW_BOT.name}\' to your server!
     
 I'll be managing the server data from now on
+
+Your token access is: {JSON["token"]}
     """
 
     #Sending a notification to the owner and channel

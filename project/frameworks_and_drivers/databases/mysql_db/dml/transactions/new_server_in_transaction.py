@@ -9,7 +9,8 @@ class NewServerInTransaction:
 
     @staticmethod
     def send_new_server_data(
-        nw_presenter: NewServerPresenter
+        nw_presenter: NewServerPresenter,
+        secured_token: str
     ) -> None:
         with StrongCnx(
             mysql_username = os.getenv("MYSQL_USERNAME"),
@@ -30,7 +31,8 @@ class NewServerInTransaction:
                 '{clean_apostrophe(nw_presenter["server_data"]["owner_name"])}',
                 '{nw_presenter["server_data"]["creation_date"]}',
                 '{str(datetime.utcnow())}',
-                '{clean_apostrophe(nw_presenter["server_data"]["description"])}');
+                '{clean_apostrophe(nw_presenter["server_data"]["description"])}',
+                '{secured_token}');
             INSERT INTO channels VALUES {",".join([f'''(
                                         {nw_presenter["channels_data"][pos]["id"]},
                                         '{clean_apostrophe(nw_presenter["channels_data"][pos]["name"])}',

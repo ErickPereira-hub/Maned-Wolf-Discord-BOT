@@ -12,6 +12,7 @@ class HttpRequestBodyArgs:
         self.__ARGS_NEW_MSG: reqparse.RequestParser = reqparse.RequestParser()
         self.__ARGS_NEW_MEMBER: reqparse.RequestParser = reqparse.RequestParser()
         self.__ARGS_NEW_CHANNEL: reqparse.RequestParser = reqparse.RequestParser()
+        self.__ARGS_PULL_DATA: reqparse.RequestParser = reqparse.RequestParser()
         self.__load_new_server_json({
             "server_id": int,
             "server_name": str,
@@ -53,6 +54,7 @@ class HttpRequestBodyArgs:
             "is_nsfw" : str,
             "server_id" : int
         })
+        self.__load_pull_data_json()
     
     def __load_new_server_json(self, info: Dict[str, Any]) -> None:
         for field, type in info.items():
@@ -70,6 +72,10 @@ class HttpRequestBodyArgs:
         for field, type in info.items():
             self.__ARGS_NEW_CHANNEL.add_argument(field, type = type, help = HttpRequestBodyArgs.STD_HELP_MSG, required = True)
 
+    def __load_pull_data_json(self) -> None:
+        self.__ARGS_PULL_DATA.add_argument("token", type = str, help = "Can't catch the token", required = True)
+        self.__ARGS_PULL_DATA.add_argument("sid", type = int, help = "Can't catch the server id", required = True)
+
     @property
     def args_new_server(self) -> reqparse.RequestParser:
         return self.__ARGS_NEW_SERVER
@@ -85,3 +91,7 @@ class HttpRequestBodyArgs:
     @property
     def args_new_channel(self) -> reqparse.RequestParser:
         return self.__ARGS_NEW_CHANNEL
+
+    @property
+    def server_token(self) -> reqparse.RequestParser:
+        return self.__ARGS_PULL_DATA

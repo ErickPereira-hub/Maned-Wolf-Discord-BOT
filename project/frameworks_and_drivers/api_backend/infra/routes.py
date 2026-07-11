@@ -12,6 +12,7 @@ from project.frameworks_and_drivers.api_backend.controllers.channel_analysis imp
 from project.frameworks_and_drivers.api_backend.controllers.top_members import TopMembers
 from project.frameworks_and_drivers.api_backend.controllers.most_active_member import MostActiveMember
 from project.frameworks_and_drivers.api_backend.controllers.message_poisson import MessagePoisson
+from project.frameworks_and_drivers.api_backend.controllers.pull_big_data import PullBigData
 
 routes: Dict[Resource, str] = {
     Server : "/server",
@@ -25,5 +26,6 @@ routes: Dict[Resource, str] = {
     ChannelAnalysis : "/channel/analysis",
     TopMembers : "/member/top_members",
     MostActiveMember: "/member/most_active_member",
-    MessagePoisson: "/msg/poisson"
+    MessagePoisson: "/msg/poisson",
+    PullBigData: "/pull"
 }

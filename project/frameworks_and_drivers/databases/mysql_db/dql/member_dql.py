@@ -106,7 +106,7 @@ class MemberDQL:
         
         return self.__top_active_members_by_ch
     
-    def get_members_qtt(self, server_id: int) -> Dict[str, Tuple[int, int, int]]:
+    '''def get_members_qtt(self, server_id: int) -> Dict[str, Tuple[int, int, int]]:
         #Query that catches the qtt of members for each day
         SQL: str = """
             WITH RECURSIVE days AS (
@@ -155,7 +155,7 @@ class MemberDQL:
             #data will be a tuple of the format (YYYY-MM-DD, quantity)
             self.__member_qtt_per_day.update({str(data[0]) : (data[1], data[2], data[3])})
         
-        return self.__member_qtt_per_day
+        return self.__member_qtt_per_day'''
 
     def get_active_members_on_server_from_db(self, sid: int, from_date: str) -> List[Dict[str, int]]:
 

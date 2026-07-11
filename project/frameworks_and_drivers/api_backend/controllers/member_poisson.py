@@ -55,7 +55,7 @@ class MemberPoisson(Resource):
         
             return self.__resp, 200
 
-        self.__dist_discrete_points: List[Dict[int, float]] = pm.get_discrete_points(incrs = self.__incrs, until = self.__until, dist_size = self.__DIST_SIZE)
+        self.__dist_discrete_points: List[Tuple[int, float]] = pm.get_discrete_points(incrs = self.__incrs, until = self.__until, dist_size = self.__DIST_SIZE)
         self.__resp: Dict[str, str | List[Tuple[int, float]]] = {
             "message" : "ok",
             "data" : self.__dist_discrete_points,
