@@ -13,7 +13,19 @@ def pull_data_ext(sid: int):
 
     #Grabbing the member report
     members_qtt: Dict[str, Tuple[int, int, int]] = MemberDQL().get_members_qtt(sid)
-    members_qtt_dist: Dict[str, Tuple[int, int, int, int]] = add_acum_freq_middleware(members_qtt)
+    members_qtt_dist: Dict[str, float | Tuple[int, int, int, int]] = add_acum_freq_middleware(members_qtt)
+    inter_members_qtt_dist: List[int] = [d[3] for d in members_qtt_dist["data"].values()]
+    overall_tot_avg = members_qtt_dist["overall_tot_avg"]
+    overall_tot_std_dev = members_qtt_dist["overall_tot_std_dev"]
+    overall_var_avg = members_qtt_dist["overall_var_avg"]
+    overall_var_std_dev = members_qtt_dist["overall_var_std_dev"]
+    new_members_qtt_dist = {
+        "data" : inter_members_qtt_dist,
+        "overall_tot_avg" : overall_tot_avg,
+        "overall_tot_std_dev" : overall_tot_std_dev,
+        "overall_var_avg" : overall_var_avg,
+        "overall_var_std_dev" : overall_var_std_dev
+    }
 
     if len(members_qtt) < 10: #Less than 10 days of member data
         resp["enough_data"] = False
@@ -100,7 +112,7 @@ def pull_data_ext(sid: int):
         "most_active_members" : active_members,
         "most_active_channels" : active_channels,
         "is_nsfw" : nsfw_dist,
-        "members_qtt" : members_qtt_dist,
+        "members_qtt" : new_members_qtt_dist,
         "new_msg_probability" : msg_predict_resp,
         "new_member_probability" : member_predict_resp,
         "member_prediction" : poly_reg_for_member_resp
