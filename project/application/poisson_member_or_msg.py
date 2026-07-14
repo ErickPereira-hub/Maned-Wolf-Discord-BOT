@@ -20,7 +20,6 @@ class PoissonMemberOrMessage:
 
     def get_poisson_in_range(self, from_qtt: int, until_qtt: int, incrs: List[int | float], last_days: int = 7) -> float:
         self.__avg = self.__get_avg_for_last_days(incrs = incrs, last_days_num = last_days)
-        
         #Checking if the range of quantities is following the constraints
         if from_qtt > until_qtt or from_qtt < 0:
             raise ValueError("from_qtt and until_qtt aren't following their constraints")

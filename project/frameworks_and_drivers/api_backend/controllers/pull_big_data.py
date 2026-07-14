@@ -14,7 +14,6 @@ class PullBigData(Resource):
         self.__JSON: Dict[str, str] = HTTP_BODY_ARGS.server_token.parse_args()
         self.__token: str = self.__JSON["token"]
         self.__sid: int = self.__JSON["sid"]
-        print(1, flush = True)
         #Discarding empty token
         if self.__token == "":
             abort(422, message = "Token can't be empty")

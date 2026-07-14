@@ -66,7 +66,7 @@ def pull_data_ext(sid: int):
             "from" : FROM,
             "until" : UNTIL
         }
-    
+
     #Grabbing the Poisson details for members
     member_predict_resp: Dict[str, str | List[Tuple[int, float]]] | None = None
     member_vol: Dict[str, Tuple[int, int, int]] = members_qtt
@@ -91,7 +91,7 @@ def pull_data_ext(sid: int):
             "from" : FROM,
             "until" : UNTIL
         }
-    
+
     #Getting how many members the server will have for the next 3 days
     poly_reg_for_member_resp: Dict[int, int] = dict()
     qtt_arr: List[int] = [d[3] for d in members_qtt_dist['data'].values()]
@@ -106,7 +106,14 @@ def pull_data_ext(sid: int):
                 ).get("predicted_output")
             }
         )
-    
+        if day == 3:
+            poly_reg_for_member_resp.update(
+                {"ERROR" :
+                 predict_poly_reg_use_case(
+                    input = -1, #<--- Input value doesn't make a difference when we want to catche the error of the prediction
+                    dataset = predict_points
+                ).get("error")})
+
     #Preparing the response
     resp.update({
         "most_active_members" : active_members,
