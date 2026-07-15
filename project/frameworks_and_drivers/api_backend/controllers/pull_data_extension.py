@@ -124,5 +124,4 @@ def pull_data_ext(sid: int):
         "new_member_probability" : member_predict_resp,
         "member_prediction" : poly_reg_for_member_resp
     })
-
     return resp
