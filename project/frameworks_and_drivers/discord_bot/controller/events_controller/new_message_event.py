@@ -10,7 +10,7 @@ async def on_message(msg: Message):
 
     if msg.author.bot: #<--- The author is the bot
         return #Ignoring the event for bot messages
-    
+
     if msg.guild is None: #<--- Message was sent to DM, not in the server
         return #Ignoring the event for DM messages
     
@@ -32,5 +32,5 @@ async def on_message(msg: Message):
     #If the operation wasn't done
     if resp.status_code != 201:
         print("❌ TROUBLE: the database couldn't capture a massage")
-    
+
     await MW_BOT.bot.process_commands(msg)
