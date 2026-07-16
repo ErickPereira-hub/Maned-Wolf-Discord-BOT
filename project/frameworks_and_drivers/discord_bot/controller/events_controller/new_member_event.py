@@ -11,7 +11,7 @@ async def on_member_join(member: Member):
     member_data: Dict[str, str | int] = {
         "member_id_disc" : member.id,
         "member_name" : member.global_name,
-        "category" : member.global_name,
+        "category" : "bot" if member.bot else "human",
         "joined_at" : str(member.joined_at) if member.joined_at is not None else None,
         "account_create_at" : str(member.created_at),
         "server_id" : member.guild.id

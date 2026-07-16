@@ -37,7 +37,14 @@ class HttpRequestBodyArgs:
             "msg_edited_at" : str,
             "author_id" : int,
             "channel_id" : int,
-            "server_id" : int
+            "server_id" : int,
+            "mname" : str,
+            "mcategory" : str,
+            "mjoined_at" : str,
+            "maccount_create_at" : str,
+            "cname" : str,
+            "ccategory" : str,
+            "cis_nsfw" : str
         })
         self.__load_new_member_json({
             "member_id_disc" : int,

@@ -66,3 +66,16 @@ class ChannelDQL:
             self.__resp_nsfw.update({opt : qtt})
 
         return self.__resp_nsfw
+    
+    def check_existence(self, server_id: int, ch_id: int) -> bool:
+        with StrongCnx(
+            mysql_username = os.getenv("MYSQL_USERNAME"),
+            mysql_password = os.getenv("MYSQL_PASSWORD"),
+            db_name = os.getenv("MYSQL_DB_NAME")
+        ) as scnx:
+            with MySQLCursor(scnx) as cursor:
+                cursor.execute("SELECT channel_id FROM channels WHERE channel_id = %s AND server_id = %s", (ch_id, server_id))
+                data: List[Tuple[int]] = cursor.fetchall()
+                if len(data) > 0:
+                    return True
+                return False

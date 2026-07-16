@@ -235,3 +235,18 @@ class MemberDQL:
                 #-1 means that we don't have the most active member because we didn't have message in the last day
 
         return self.__most_active_member_id
+    
+    def check_existence(self, server_id: int, discord_id: int) -> bool:
+        signal: bool = False
+        #Getting the aggregated data from MySQL
+        with StrongCnx(
+            mysql_username = os.getenv("MYSQL_USERNAME"),
+            mysql_password = os.getenv("MYSQL_PASSWORD"),
+           db_name = os.getenv("MYSQL_DB_NAME")
+        ) as scnx:
+            with MySQLCursor(scnx) as cursor:
+                cursor.execute("SELECT member_id_disc FROM members WHERE member_id_disc = %s AND server_id = %s", (discord_id, server_id))
+                data: List[Tuple[int]] = cursor.fetchall()
+                #True if there is such user in the database
+                if len(data) > 0: signal = True
+        return signal

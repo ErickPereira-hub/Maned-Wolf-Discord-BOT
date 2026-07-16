@@ -21,7 +21,14 @@ async def on_message(msg: Message):
         "msg_edited_at": str(msg.edited_at) if msg.edited_at is not None else None,
         "author_id": msg.author.id,
         "channel_id": msg.channel.id,
-        "server_id": msg.guild.id
+        "server_id": msg.guild.id,
+        "mname" : msg.author.global_name,
+        "mcategory" : "bot" if msg.author.bot else "human",
+        "mjoined_at" : str(msg.author.joined_at) if msg.author.joined_at is not None else None,
+        "maccount_create_at" : str(msg.author.created_at),
+        "cname" : msg.channel.name,
+        "ccategory" : msg.channel.category.name if msg.channel.category is not None else None,
+        "cis_nsfw" : "yes" if msg.channel.is_nsfw() else "no"
     }
 
     #Doing the request

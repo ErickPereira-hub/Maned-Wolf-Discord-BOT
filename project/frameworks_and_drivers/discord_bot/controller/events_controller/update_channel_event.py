@@ -11,9 +11,10 @@ async def on_guild_channel_update(before: discord.abc.GuildChannel, after: disco
     new_name: str = after.name
     new_category: str | None = after.category
     new_is_nsfw: str = "yes" if after.is_nsfw() else "no"
+    sid: int = after.guild.id
     
     #Sending a request of edition to the database throughout the API
-    URL: str = os.getenv("BASE_URL") + f"/channel?channel_id={channel_id}&new_name={new_name}&new_category={new_category}&new_is_nsfw={new_is_nsfw}"
+    URL: str = os.getenv("BASE_URL") + f"/channel?channel_id={channel_id}&new_name={new_name}&new_category={new_category}&new_is_nsfw={new_is_nsfw}&server_id={sid}"
     resp: Response = patch(URL)
     CacheBacklog.update_backlog(resp.status_code)#<---Updating the backlog in RAM
     

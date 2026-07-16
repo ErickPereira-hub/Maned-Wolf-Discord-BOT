@@ -19,7 +19,7 @@ class MemberDML(DatabaseInsertion, DatabaseDeletion):
             with MySQLCursor(scnx) as cursor:
                 cursor.execute(
                 """
-                    INSERT INTO members (member_id_disc, member_name, category, joined_at, account_create_at, server_id) VALUES
+                    INSERT INTO members (member_id_disc, member_name, category, joined_at, account_created_at, server_id) VALUES
                     (%s, %s, %s, %s, %s, %s)
                 """, (member_id_disc, member_name, category, joined_at, account_create_at, server_id))
                 scnx.commit()
