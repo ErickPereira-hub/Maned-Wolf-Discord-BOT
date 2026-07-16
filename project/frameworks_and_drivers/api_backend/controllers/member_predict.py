@@ -6,7 +6,7 @@ from project.frameworks_and_drivers.api_backend.middlewares.acumulative_freq_mid
 from project.application.use_cases.predict_poly_reg_use_case import predict_poly_reg_use_case
 from project.frameworks_and_drivers.api_backend.middlewares.rate_blocker import rate_blocker
 from project.frameworks_and_drivers.databases.redis_db.cache_aside.ca_for_member_predict import CacheAsideMemberPredict
-from pprint import pprint
+from project.frameworks_and_drivers.api_backend.controllers.extensions.check_server_extension import dismish_non_servers
 
 class MemberPredict(Resource):
 
@@ -25,6 +25,7 @@ class MemberPredict(Resource):
             abort(400, message = "The maximum for 'day' is 3 and it must be an integer")
         if self.__sid is None:
             abort(400, message = "server id must be present")
+        dismish_non_servers(self.__sid)
 
         self.__cache_obj: CacheAsideMemberPredict = CacheAsideMemberPredict(server_id = self.__sid)
 

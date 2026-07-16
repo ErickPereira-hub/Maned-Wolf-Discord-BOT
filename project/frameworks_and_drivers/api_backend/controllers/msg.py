@@ -7,6 +7,7 @@ from project.frameworks_and_drivers.databases.mysql_db.dml.dml_msg import Messag
 from project.frameworks_and_drivers.databases.mysql_db.dql.channel_dql import ChannelDQL
 from project.frameworks_and_drivers.databases.mysql_db.dml.dml_channel import ChannelDML
 from flask import request, Response
+from project.frameworks_and_drivers.api_backend.controllers.extensions.check_server_extension import dismish_non_servers
 
 class Msg(Resource):
     
@@ -25,7 +26,7 @@ class Msg(Resource):
         for key in self.__important:
             if self.__args[key] is None:
                 abort(400, message = "An important information about the server wasn't given")
-        
+        dismish_non_servers(self.__args["server_id"])
         #Checking if the user who sent the message exists in the database
         self.__signal_existence_of_member: bool = self.__MEMBER_DB_OBJ_DQL.check_existence(self.__args["server_id"], self.__args["author_id"])
         if not self.__signal_existence_of_member:

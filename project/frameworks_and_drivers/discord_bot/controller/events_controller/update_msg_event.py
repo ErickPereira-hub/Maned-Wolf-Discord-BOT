@@ -18,4 +18,8 @@ async def on_raw_message_edit(payload: discord.RawMessageUpdateEvent):
     #if something went bad on the API
     ERR = f"ERROR ---> UPDATE OF MESSAGE WITH ID {msg_id} WENT WRONG"
     if resp.status_code != 200:
+        
+        if resp.status_code == 404:
+            return
+        
         print(ERR)

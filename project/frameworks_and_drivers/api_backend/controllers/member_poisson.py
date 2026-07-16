@@ -4,6 +4,7 @@ from project.frameworks_and_drivers.databases.mysql_db.dql.member_dql import Mem
 from typing import Tuple, Dict, List
 from project.application.poisson_member_or_msg import PoissonMemberOrMessage
 from project.frameworks_and_drivers.api_backend.middlewares.rate_blocker import rate_blocker
+from project.frameworks_and_drivers.api_backend.controllers.extensions.check_server_extension import dismish_non_servers
 
 class MemberPoisson(Resource):
 
@@ -30,6 +31,8 @@ class MemberPoisson(Resource):
         if self.__from_qtt < 0 or self.__until < self.__from_qtt:
             abort(400, message = "from_qtt must be positive and until can't be smaller than from_qtt")
         
+        dismish_non_servers(self.__server_id)
+
         #Querying the database
         self.__dataset: Dict[str, Tuple[int, ...]] = self.__MEMBER_DQL.get_members_qtt(self.__server_id)
         self.__incrs: List[int | float] = [data[0] for data in self.__dataset.values()]

@@ -38,7 +38,10 @@ async def get_report_members(ctx: commands.Context, format: str, last_days: int 
 
     #Sending a response when the request is unsuccessful
     if resp.status_code != 200:
-
+        
+        if resp.status_code == 404:
+            return
+        
         if resp.status_code == 429:
             await ctx.reply(f"❌ Too many requests. Hold on, please!")
             return

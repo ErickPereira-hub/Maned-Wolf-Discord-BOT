@@ -4,6 +4,7 @@ from project.frameworks_and_drivers.api_backend.infra.http_request_body_args_sin
 from project.frameworks_and_drivers.databases.mysql_db.dml.dml_channel import ChannelDML
 from flask import request, Response
 from project.frameworks_and_drivers.databases.mysql_db.dql.channel_dql import ChannelDQL
+from project.frameworks_and_drivers.api_backend.controllers.extensions.check_server_extension import dismish_non_servers
 
 class Channel(Resource):
     
@@ -20,6 +21,8 @@ class Channel(Resource):
         for key in self.__important:
             if self.__args[key] is None:
                 abort(400, message = "An important information about the server wasn't given")
+        
+        dismish_non_servers(self.__args["server_id"])
 
         #Sending the channel to the database
         self.__CHANNEL_DB_OBJ.send_to_db(
@@ -53,7 +56,7 @@ class Channel(Resource):
         #Checking if the id is None
         if self.__cid is None or self.__sid is None:
             return {"message": "ERROR ---> The channel or server id that went to the api is None"}, 400
-
+        dismish_non_servers(self.__sid)
         #Checking if the channel where the message was sent exists in the database
         self.__signal_existence_of_channel: bool = self.__CHANNEL_DB_OBJ_DQL.check_existence(
             server_id = self.__sid,

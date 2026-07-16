@@ -3,6 +3,7 @@ from typing import Dict, List, Tuple
 from project.frameworks_and_drivers.databases.mysql_db.dql.member_dql import MemberDQL
 from flask import Response, request
 from project.frameworks_and_drivers.api_backend.middlewares.rate_blocker import rate_blocker
+from project.frameworks_and_drivers.api_backend.controllers.extensions.check_server_extension import dismish_non_servers
 
 class TopMembers(Resource):
 
@@ -21,7 +22,7 @@ class TopMembers(Resource):
                 abort(400, message = f"\'{cred}\' must be filled")
         if self.__by not in ("channel", "server"):
             abort(400, message = "\'channel\' and \'server\' are the unique possible values for the parameter \'by\'")
-
+        dismish_non_servers(self.__sid)
         self.__data: List[Dict[str, int]] | None = None #<--- Future JSON response
 
         #If the user wants to catch the most active members by channel:

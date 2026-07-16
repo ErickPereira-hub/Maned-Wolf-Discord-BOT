@@ -5,6 +5,7 @@ from typing import Tuple, Dict, List
 from project.frameworks_and_drivers.databases.mysql_db.dql.messages_dql import MessageDQL
 from project.frameworks_and_drivers.api_backend.middlewares.rate_blocker import rate_blocker
 from project.application.poisson_member_or_msg import PoissonMemberOrMessage
+from project.frameworks_and_drivers.api_backend.controllers.extensions.check_server_extension import dismish_non_servers
 
 class MessagePoisson(Resource):
 
@@ -28,7 +29,7 @@ class MessagePoisson(Resource):
         for income_data in self.__data:
             if income_data is None:
                 abort(400, message = "You must define \'chart\', \'server_id\', \'from\' and \'until\'")
-        
+        dismish_non_servers(self.__sid)
         #Fetching the database
         self.__msg_volume = MessageDQL().get_msg_volume_per_day(server_id = self.__sid)
         

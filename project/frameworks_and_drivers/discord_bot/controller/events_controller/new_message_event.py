@@ -38,6 +38,10 @@ async def on_message(msg: Message):
 
     #If the operation wasn't done
     if resp.status_code != 201:
+        
+        if resp.status_code == 404:
+            return
+        
         print("❌ TROUBLE: the database couldn't capture a massage")
 
     await MW_BOT.bot.process_commands(msg)

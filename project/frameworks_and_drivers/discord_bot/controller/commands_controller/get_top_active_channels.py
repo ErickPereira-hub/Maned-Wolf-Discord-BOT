@@ -35,6 +35,9 @@ async def get_top_active_channels(ctx: commands.Context, chart: str = "no"):
     #Problem during the request must exit the endpoint
     if status != 200:
 
+        if resp.status_code == 404:
+            return
+        
         if status == 429:
             await ctx.reply(f"❌ Too many requests. Hold on, please!")
             return

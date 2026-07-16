@@ -6,6 +6,7 @@ from project.frameworks_and_drivers.databases.mysql_db.dql.channel_dql import Ch
 from flask import Response, request
 from project.frameworks_and_drivers.api_backend.middlewares.rate_blocker import rate_blocker
 from project.frameworks_and_drivers.databases.redis_db.cache_aside.ca_for_top_active import CacheAsideTopActive
+from project.frameworks_and_drivers.api_backend.controllers.extensions.check_server_extension import dismish_non_servers
 
 class TopActiveCh(Resource):
 
@@ -17,7 +18,7 @@ class TopActiveCh(Resource):
         self.__server_id: int | None = request.args.get("server_id", type = int)
         if self.__server_id is None:
             abort(400, message = "You must send the id of the server to \"server_id\"")
-        
+        dismish_non_servers(self.__server_id)
         self.__dataset: List[Dict[str, int]] | None = None
         #Checking the existence of data in Redis
         redis_obj: CacheAsideTopActive = CacheAsideTopActive(server_id = self.__server_id)

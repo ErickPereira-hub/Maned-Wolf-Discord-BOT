@@ -5,6 +5,7 @@ from flask import request, Response
 from project.frameworks_and_drivers.api_backend.middlewares.rate_blocker import rate_blocker
 from project.frameworks_and_drivers.databases.redis_db.cache_aside.cache_aside import CacheAside
 from project.frameworks_and_drivers.databases.redis_db.cache_aside.ca_for_ch_analysis_by_nsfw import CacheAsideChannelAnalysisByNSFW
+from project.frameworks_and_drivers.api_backend.controllers.extensions.check_server_extension import dismish_non_servers
 
 class ChannelAnalysis(Resource):
 
@@ -18,6 +19,8 @@ class ChannelAnalysis(Resource):
         #Checking incoming data
         if self.__sid is None:
             abort(400, message = "server_id must be given")
+        
+        dismish_non_servers(self.__sid)
 
         self.__data: Dict[str, int] | None = None #<--- Declaring the attribute that will receive the data from the database
 

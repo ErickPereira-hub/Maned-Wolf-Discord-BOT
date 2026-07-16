@@ -21,4 +21,8 @@ async def on_guild_channel_update(before: discord.abc.GuildChannel, after: disco
     #if something went bad on the API
     ERR = f"ERROR ---> UPDATE OF CHANNEL WITH ID {channel_id} WENT WRONG"
     if resp.status_code != 200:
+        
+        if resp.status_code == 404:
+            return
+        
         print(ERR)

@@ -5,6 +5,7 @@ from flask import request, Response
 from project.frameworks_and_drivers.api_backend.middlewares.acumulative_freq_middleware import add_acum_freq_middleware
 from project.frameworks_and_drivers.api_backend.middlewares.rate_blocker import rate_blocker
 from project.frameworks_and_drivers.databases.redis_db.cache_aside.ca_for_member_analysis import CacheAsideMemberAnalysis
+from project.frameworks_and_drivers.api_backend.controllers.extensions.check_server_extension import dismish_non_servers
 
 class MemberAnaysis(Resource):
 
@@ -22,6 +23,8 @@ class MemberAnaysis(Resource):
         if self.__server_id is None:
             abort(400, message = "The server id wasn't given")
         
+        dismish_non_servers(self.__server_id)
+
         self.__data: Dict[str, Tuple[int, int, int]] | None = None
 
         #Applying cache-aside and fetching the database

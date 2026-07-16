@@ -40,6 +40,9 @@ async def predict_members_qtt(ctx: commands.Context,
     #If we get into trouble with the API:
     if status != 200:
         
+        if resp.status_code == 404:
+            return
+        
         if status == 429:
             await ctx.reply(f"❌ Too many requests. Hold on, please!")
             return

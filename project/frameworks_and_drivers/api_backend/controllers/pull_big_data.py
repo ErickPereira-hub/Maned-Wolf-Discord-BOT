@@ -3,8 +3,7 @@ from typing import Any, Dict
 from project.frameworks_and_drivers.api_backend.infra.http_request_body_args_singleton import HTTP_BODY_ARGS
 from project.frameworks_and_drivers.databases.mysql_db.dql.server_dql import ServerDQL
 from flask import Response
-from project.frameworks_and_drivers.api_backend.middlewares.rate_blocker import rate_blocker
-from project.frameworks_and_drivers.api_backend.controllers.pull_data_extension import pull_data_ext
+from project.frameworks_and_drivers.api_backend.controllers.extensions.pull_data_extension import pull_data_ext
 
 class PullBigData(Resource):
 

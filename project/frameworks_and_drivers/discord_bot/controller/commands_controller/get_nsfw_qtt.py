@@ -34,6 +34,9 @@ async def get_nsfw_qtt(ctx: commands.Context, chart = "no"):
 
     if status != 200:
 
+        if resp.status_code == 404:
+            return
+
         if status == 429:
             await ctx.reply(f"❌ Too many requests. Hold on, please!")
             return

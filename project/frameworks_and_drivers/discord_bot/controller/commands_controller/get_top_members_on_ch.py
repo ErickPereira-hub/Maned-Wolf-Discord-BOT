@@ -39,6 +39,9 @@ async def get_top_members_on_channel(ctx: commands.Context, chart: str = "no"):
 
     if status != 200:
         
+        if resp.status_code == 404:
+            return
+        
         if status == 429:
             await ctx.reply(f"❌ Wait, too many requests were done in your name.")
             return

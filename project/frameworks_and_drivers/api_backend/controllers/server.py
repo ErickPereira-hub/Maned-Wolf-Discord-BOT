@@ -8,6 +8,7 @@ from flask import Response, request
 from project.frameworks_and_drivers.databases.mysql_db.dml.dml_server import ServerDML
 from project.application.utils.token_gen import TokenFactory
 from werkzeug.security import generate_password_hash
+from project.frameworks_and_drivers.api_backend.controllers.extensions.check_server_extension import dismish_non_servers
 
 class Server(Resource):
     

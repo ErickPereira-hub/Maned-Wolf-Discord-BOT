@@ -3,6 +3,7 @@ from typing import Any, Dict, Tuple
 from project.frameworks_and_drivers.api_backend.infra.http_request_body_args_singleton import HTTP_BODY_ARGS
 from project.frameworks_and_drivers.databases.mysql_db.dml.dml_member import MemberDML
 from flask import request, Response
+from project.frameworks_and_drivers.api_backend.controllers.extensions.check_server_extension import dismish_non_servers
 
 class Member(Resource):
     
@@ -17,7 +18,8 @@ class Member(Resource):
         for key in self.__important:
             if self.__args[key] is None:
                 abort(400, message = "An important information about the server wasn't given")
-
+        dismish_non_servers(self.__args["server_id"])
+        
         #Sending the member to the database
         self.__MEMBER_DB_OBJ.send_to_db(
             member_id_disc = self.__args["member_id_disc"],

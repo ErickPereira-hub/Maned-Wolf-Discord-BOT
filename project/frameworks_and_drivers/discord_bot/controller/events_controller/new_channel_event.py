@@ -24,6 +24,8 @@ async def on_guild_channel_create(channel: discord.abc.GuildChannel):
 
     #If the operation wasn't done
     if resp.status_code != 201:
+        if resp.status_code == 404:
+            return
         if isinstance(channel, discord.TextChannel):
             try:
                 await channel.send("❌ TROUBLE: I wasn't able to fetch your data : ^ ( ")
