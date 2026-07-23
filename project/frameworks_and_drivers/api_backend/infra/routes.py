@@ -13,6 +13,8 @@ from project.frameworks_and_drivers.api_backend.controllers.top_members import T
 from project.frameworks_and_drivers.api_backend.controllers.most_active_member import MostActiveMember
 from project.frameworks_and_drivers.api_backend.controllers.message_poisson import MessagePoisson
 from project.frameworks_and_drivers.api_backend.controllers.pull_big_data import PullBigData
+from project.frameworks_and_drivers.api_backend.controllers.endpoints_for_web_site.download import DownloadMessageAuditLogs
+from project.frameworks_and_drivers.api_backend.controllers.endpoints_for_web_site.poisson_msg_on_web import PoissonMessageOnWeb
 
 routes: Dict[Resource, str] = {
     Server : "/server",
@@ -27,5 +29,7 @@ routes: Dict[Resource, str] = {
     TopMembers : "/member/top_members",
     MostActiveMember: "/member/most_active_member",
     MessagePoisson: "/msg/poisson",
-    PullBigData: "/pull"
+    PullBigData: "/pull",
+    DownloadMessageAuditLogs : "/download/audit_msg",
+    PoissonMessageOnWeb : "/msg/poisson_for_web"
 }

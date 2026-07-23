@@ -15,6 +15,7 @@ class AutomateMySQLDatabaseCreation:
         cls.__create_tables()
         cls.__create_procedures()
         cls.__create_indexes()
+        cls.__create_triggers()
 
     @classmethod
     def __create_db(cls) -> None:
@@ -94,6 +95,30 @@ class AutomateMySQLDatabaseCreation:
                             date datetime NOT NULL
                         )
                     """)
+                cursor.execute(
+                    """
+                        CREATE TABLE IF NOT EXISTS messages_edit_audit_log (
+                            audit_id INT PRIMARY KEY AUTO_INCREMENT,
+                            msg_id BIGINT NOT NULL,
+                            edit_date DATETIME DEFAULT NOW(),
+                            message_date DATETIME,
+                            previous_content VARCHAR(2048) NOT NULL,
+                            new_content VARCHAR(2048) NOT NULL
+                        )
+                    """
+                )
+                cursor.execute(
+                    """
+                        CREATE TABLE IF NOT EXISTS messages_delete_audit_log (
+                            audit_id INT PRIMARY KEY AUTO_INCREMENT,
+                            msg_id BIGINT NOT NULL,
+                            delete_date DATETIME DEFAULT NOW(),
+                            message_date DATETIME,
+                            content VARCHAR(2048) NOT NULL,
+                            channel_id BIGINT NOT NULL
+                        )
+                    """
+                )
     
     @classmethod
     def __create_procedures(cls) -> None:
@@ -165,3 +190,38 @@ class AutomateMySQLDatabaseCreation:
                     try:
                         cursor.execute(SQL_indexing)
                     except ProgrammingError: pass #<-- In this situation, PorgrammingError is raised when the index already exists, so we use this error to pass such uneeded insertion
+    
+    @classmethod
+    def __create_triggers(self) -> None:
+        with StrongCnx(
+            mysql_username=os.getenv("MYSQL_USERNAME"),
+            mysql_password=os.getenv("MYSQL_PASSWORD"),
+            db_name = os.getenv("MYSQL_DB_NAME")
+        ) as scnx:
+            with MySQLCursor(scnx) as cursor:
+                self.__upd_msg_trigger_sql: str = """
+                DELIMITER $$
+                    CREATE TRIGGER IF NOT EXISTS audit_log_updt_msg_trigger
+                    BEFORE UPDATE ON messages
+                    FOR EACH ROW
+                    BEGIN
+                        INSERT INTO messages_edit_audit_log (msg_id, edit_date, previous_content, new_content, message_date)
+                        VALUES (OLD.message_id, NOW(), OLD.message_text, NEW.message_text, OLD.message_date);
+                    END;
+                $$
+                DELIMITER ;
+                """ #<--- When a message is updated, its old content will be saved in a audit table.
+                self.__del_msg_trigger_sql: str = """
+                DELIMITER $$
+                    CREATE TRIGGER IF NOT EXISTS audit_log_del_msg_trigger
+                    BEFORE DELETE ON messages
+                    FOR EACH ROW
+                    BEGIN
+                        INSERT INTO messages_delete_audit_log (msg_id, delete_date, message_date, content, channel_id)
+                        VALUES (OLD.message_id, NOW(), OLD.message_date, OLD.message_text, OLD.channel_id);
+                    END;
+                $$
+                DELIMITER ;
+                """ #<--- When a message is deleted, this message will be saved in a audit table
+                cursor.execute(self.__upd_msg_trigger_sql)
+                cursor.execute(self.__del_msg_trigger_sql)

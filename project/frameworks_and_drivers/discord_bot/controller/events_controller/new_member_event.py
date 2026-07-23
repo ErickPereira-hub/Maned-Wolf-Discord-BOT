@@ -24,6 +24,8 @@ async def on_member_join(member: Member):
 
     #If the operation wasn't done
     if resp.status_code != 201:
+        
         if resp.status_code == 404:
             return
+        
         print("❌ TROUBLE: I wasn't able to fetch a new member : ^ ( ")
