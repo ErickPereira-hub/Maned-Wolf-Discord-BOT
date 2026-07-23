@@ -1,31 +1,21 @@
-from flask import Response, request, make_response
-from flask_restful import Resource, abort
+from flask import Response, make_response
+from flask_restful import Resource
 from project.frameworks_and_drivers.api_backend.middlewares.refresh_cookie import refresh_jwt_or_cookie
-from project.frameworks_and_drivers.api_backend.middlewares.auth_middleware import is_authorized
 from project.frameworks_and_drivers.databases.mysql_db.dql.member_dql import MemberDQL
-from typing import Dict, List, Tuple
+from project.frameworks_and_drivers.api_backend.controllers.extensions.poisson_web_extension import get_poisson_web_beginning
 from project.application.poisson_member_or_msg import PoissonMemberOrMessage
-from typing import Dict, List
+from typing import Dict, List, Tuple
 import json
 
 class PoissonMemberOnWeb(Resource):
 
     def get(self) -> Response:
 
-        #Checking authorization
-        self.__uid: int = is_authorized()
-
-        #Grabbing the range of analysis
-        self.__from: int | None = request.args.get("from", type = int)
-        self.__until: int | None = request.args.get("until", type = int)
-
-        #Checking the income values
-        if self.__from is None or self.__until is None:
-            abort(400, message = "Bad Request: you must deliver integers to 'from' and 'until' parameters")
-
-        #Ignoring invalid values
-        if self.__from < 0 or self.__from > self.__until:
-            abort(422, message = "Forbidden values: 'from' must be positive and can't be lower than 'until'")
+        #Checking authorization and grabbing the data that came from the frontend
+        self.__data: Dict[str, int] = get_poisson_web_beginning()
+        self.__uid = self.__data["uid"]
+        self.__from = self.__data["from"]
+        self.__until = self.__data["until"]
 
         #Grabbing Poisson probability if everything went fine
         self.__dataset: Dict[str, Tuple[int, ...]] = MemberDQL().get_members_qtt(self.__uid)
