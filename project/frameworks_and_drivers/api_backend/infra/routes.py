@@ -15,6 +15,7 @@ from project.frameworks_and_drivers.api_backend.controllers.message_poisson impo
 from project.frameworks_and_drivers.api_backend.controllers.pull_big_data import PullBigData
 from project.frameworks_and_drivers.api_backend.controllers.endpoints_for_web_site.download import DownloadMessageAuditLogs
 from project.frameworks_and_drivers.api_backend.controllers.endpoints_for_web_site.poisson_msg_on_web import PoissonMessageOnWeb
+from project.frameworks_and_drivers.api_backend.controllers.endpoints_for_web_site.poisson_member_on_web import PoissonMemberOnWeb
 
 routes: Dict[Resource, str] = {
     Server : "/server",
@@ -31,5 +32,6 @@ routes: Dict[Resource, str] = {
     MessagePoisson: "/msg/poisson",
     PullBigData: "/pull",
     DownloadMessageAuditLogs : "/download/audit_msg",
-    PoissonMessageOnWeb : "/msg/poisson_for_web"
+    PoissonMessageOnWeb : "/msg/poisson_for_web",
+    PoissonMemberOnWeb: "/member/poisson_for_web"
 }

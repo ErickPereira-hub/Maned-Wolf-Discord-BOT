@@ -1,0 +1,49 @@
+from flask import Response, request, make_response
+from flask_restful import Resource, abort
+from project.frameworks_and_drivers.api_backend.middlewares.refresh_cookie import refresh_jwt_or_cookie
+from project.frameworks_and_drivers.api_backend.middlewares.auth_middleware import is_authorized
+from project.frameworks_and_drivers.databases.mysql_db.dql.member_dql import MemberDQL
+from typing import Dict, List, Tuple
+from project.application.poisson_member_or_msg import PoissonMemberOrMessage
+from typing import Dict, List
+import json
+
+class PoissonMemberOnWeb(Resource):
+
+    def get(self) -> Response:
+
+        #Checking authorization
+        self.__uid: int = is_authorized()
+
+        #Grabbing the range of analysis
+        self.__from: int | None = request.args.get("from", type = int)
+        self.__until: int | None = request.args.get("until", type = int)
+
+        #Checking the income values
+        if self.__from is None or self.__until is None:
+            abort(400, message = "Bad Request: you must deliver integers to 'from' and 'until' parameters")
+
+        #Ignoring invalid values
+        if self.__from < 0 or self.__from > self.__until:
+            abort(422, message = "Forbidden values: 'from' must be positive and can't be lower than 'until'")
+
+        #Grabbing Poisson probability if everything went fine
+        self.__dataset: Dict[str, Tuple[int, ...]] = MemberDQL().get_members_qtt(self.__uid)
+        self.__incrs: List[int | float] = [data[0] for data in self.__dataset.values()]
+        pm: PoissonMemberOrMessage = PoissonMemberOrMessage()
+        self.__prob: float = pm.get_poisson_in_range(
+                    from_qtt = self.__from,
+                    until_qtt = self.__until,
+                    incrs = self.__incrs)
+        
+        #Preparing and sending the response
+        self.__resp: Response = make_response(
+            json.dumps({
+                "probability" : self.__prob,
+                "from" : self.__from,
+                "until" : self.__until
+            }), 200
+        )
+        self.__resp.headers["Content-Type"] = "application/json" #<--- Informing that we are sending a JSON inside the string.
+        refresh_jwt_or_cookie(self.__resp) #<--- Refresing the cookie or jwt (if it is about to expire)
+        return self.__resp
