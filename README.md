@@ -85,6 +85,7 @@ detail: the member entity is not just a person in discord, it is an entity that 
 ![](./project/frameworks_and_drivers/discord_bot/src_static/docker.jpg)
 
 **Support for websites:** Several API endpoints were built to support the bot's web dashboard, which requires user authentication to access server-specific data. To secure these user sessions, JWT rotation and HTTP cookies were implemented. Additionally, the dashboard allows administrators to download deleted and edited messages (a feature powered directly by two database triggers, executing the data transfer entirely within the database rather than the application layer).
+
 ---
 
 **Commands**
