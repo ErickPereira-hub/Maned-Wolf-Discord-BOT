@@ -1,7 +1,7 @@
 from project.domain.interfaces.rate_limit_world import RateLimitWorld
 from project.frameworks_and_drivers.databases.redis_db.infra.redis_cnx_singleton import rcnx
 import os
-from typing import List, Dict
+from typing import List
 from time import sleep, time
 from datetime import datetime
 

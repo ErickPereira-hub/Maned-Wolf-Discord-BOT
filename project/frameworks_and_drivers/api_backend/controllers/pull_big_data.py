@@ -9,6 +9,8 @@ from project.frameworks_and_drivers.api_backend.jwt.jwt_singleton import JWT_SIN
 from project.frameworks_and_drivers.api_backend.middlewares.cookies_middleware import send_cookie
 import os
 import json
+from project.frameworks_and_drivers.api_backend.middlewares.block_brute_force_attacks import block_brute_force_attacks
+from project.frameworks_and_drivers.databases.redis_db.rate_limit.block_login_abuse import loginBlocker
 
 class PullBigData(Resource):
 
@@ -27,6 +29,8 @@ class PullBigData(Resource):
         if self.__sid < 0:
             abort(422, message = "Id can't be negative")
 
+        block_brute_force_attacks(self.__sid) #<--- Blocking brute force attacks
+
         self.__signal: bool = ServerDQL().has_permission(
             sid = self.__sid,
             token = self.__token
@@ -37,7 +41,7 @@ class PullBigData(Resource):
             self.__jwt_token: str = JWT_SINGLETON.get_new_jwt_token(self.__sid)
             self.__legit_response: Response = make_response(json.dumps(self.__resp), 200)
             self.__legit_response.headers["Content-Type"] = "application/json"
-            print(self.__jwt_token, flush = True)
+            loginBlocker.delete_user(self.__sid) #<--- Deleting the user from redis for the brute force analysis
             send_cookie(
                 resp = self.__legit_response,
                 key = os.getenv("JWT_COOKIE_TAG"),

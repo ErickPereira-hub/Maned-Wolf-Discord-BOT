@@ -1,8 +1,5 @@
-from flask import Response, request, make_response
-from flask_restful import Resource, abort
-from project.frameworks_and_drivers.api_backend.middlewares.refresh_cookie import refresh_jwt_or_cookie
-from project.frameworks_and_drivers.api_backend.middlewares.auth_middleware import is_authorized
-from project.frameworks_and_drivers.databases.mysql_db.dql.messages_dql import MessageDQL
+from flask import Response, make_response
+from flask_restful import Resource
 import os
 
 class LogOut(Resource):
