@@ -10,5 +10,6 @@ RUN pip install -r requirements.txt
 
 COPY ./project ./project
 COPY ./run_api ./run_api
+COPY .env .env
 
 CMD ["python", "./run_api/run_api.py"]

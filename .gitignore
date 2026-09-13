@@ -1,7 +1,4 @@
 /venv
-bot_credentials.env
-mysql_credentials.env
-api_credentials.env
 test.py
 /__pycache__
 .env

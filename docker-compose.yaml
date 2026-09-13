@@ -13,7 +13,7 @@ services:
     networks:
       - private
     environment:
-      MYSQL_ROOT_PASSWORD: ${DOCKER_MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
     volumes:
       - mysql_ultra_vol:/var/lib/mysql
 

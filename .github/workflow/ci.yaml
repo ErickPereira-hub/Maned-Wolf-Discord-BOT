@@ -1,0 +1,59 @@
+name: CI pipeline for automated tests
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    name: Running test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Accessing source code
+        uses: actions/checkout@v4
+      
+      - name: Creating .env file
+        run: |
+          cat <<EOF > .env
+          MYSQL_DB_NAME=${{ secrets.MYSQL_DB_NAME }}
+          MYSQL_USERNAME=${{ secrets.MYSQL_USERNAME }}
+          MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }}
+          QTT_NEW_TOKENS_PER_SECOND=${{ secrets.QTT_NEW_TOKENS_PER_SECOND }}
+          TOKEN_BUCKET_CAPACITY=${{ secrets.TOKEN_BUCKET_CAPACITY }}
+          CA_EXP_TIME=${{ secrets.CA_EXP_TIME }}
+          TTL_FOR_LOGIN_RATELIMIT=${{ secrets.TTL_FOR_LOGIN_RATELIMIT }}
+          LOGIN_CHANCES=${{ secrets.LOGIN_CHANCES }}
+          BASE_URL=${{ secrets.BASE_URL }}
+          JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }}
+          JWT_ALGORITHM=${{ secrets.JWT_ALGORITHM }}
+          JWT_TTL=${{ secrets.JWT_TTL }}
+          JWT_MAX_REFRESH_TIME_IN_MINUTES=${{ secrets.JWT_MAX_REFRESH_TIME_IN_MINUTES }}
+          COOKIE_TTL=${{ secrets.COOKIE_TTL }}
+          JWT_COOKIE_TAG=${{ secrets.JWT_COOKIE_TAG }}
+          BOT_TOKEN=${{ secrets.BOT_TOKEN }}
+          EOF
+      
+      - name: Setting Python environment
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+          cache: 'pip'
+          cache-dependency-path: 'requirements.txt'
+      
+      - name: Installing dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then 
+            pip install -r requirements.txt
+          fi
+      
+      - name: Building docker images and running docker containers
+        run: docker compose up -d --build
+      
+      - name: running tests
+        run: pytest -v
+      
+      - name: Closing containers and volume
+        if: always()
+        run: docker compose down -v

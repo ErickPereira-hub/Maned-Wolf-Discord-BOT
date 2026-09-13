@@ -10,5 +10,6 @@ RUN pip install -r requirements.txt
 
 COPY ./project ./project
 COPY ./run_bot ./run_bot
+COPY .env .env
 
 CMD ["python", "./run_bot/run_bot.py"]
