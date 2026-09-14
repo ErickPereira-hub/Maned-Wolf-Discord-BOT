@@ -2,6 +2,7 @@ from concurrent.futures import ThreadPoolExecutor
 import os
 from typing import Dict, List, Callable
 from requests import Response, get
+import dotenv
 import project.frameworks_and_drivers #<--- Important: this import starts the environmental variables that we need
 
 def fetch_api(endpoint: Dict[str, str], status_list: List[int]) -> int:
@@ -11,6 +12,7 @@ def fetch_api(endpoint: Dict[str, str], status_list: List[int]) -> int:
     status_list.append(resp.status_code)
 
 def test_token_bucket_distributed() -> None:
+    dotenv.load_dotenv(".env")
     mocked_user_id: int = 1514414243003236523 #<--- Must be a real member id integrated with the bot.
 
     #Endpoints
