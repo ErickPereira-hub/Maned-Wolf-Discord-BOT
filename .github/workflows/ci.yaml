@@ -50,10 +50,13 @@ jobs:
       
       - name: Building docker images and running docker containers
         run: docker compose up -d --build
-      
+
+      - name: waiting the containers to go up (45sec)
+        run: sleep 45
+
       - name: running tests
         run: pytest -v
-      
+
       - name: Closing containers and volume
         if: always()
         run: docker compose down -v
