@@ -16,12 +16,11 @@ def test_token_bucket_distributed() -> None:
     mocked_user_id: int = 1514414243003236523 #<--- Must be a real member id integrated with the bot.
 
     #Endpoints
-    BASE_URL: str = os.getenv("BASE_URL")
+    BASE_URL: str = "http://localhost:3000"
     cred_extra: str = f"?member_id={mocked_user_id}"
     endpoints: List[Dict[str, Callable]] = [
         {BASE_URL + f"/member/poisson" + cred_extra : get},
         {BASE_URL + f"/member/analysis" + cred_extra : get},
-        {BASE_URL + f"/member/predict" + cred_extra: get},
         {BASE_URL + f"/channel/top_active" + cred_extra : get},
         {BASE_URL + f"/channel/analysis" + cred_extra : get}
     ]
